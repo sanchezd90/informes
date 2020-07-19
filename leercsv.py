@@ -4,7 +4,7 @@ import csv
 app = Flask(__name__)
 titulo = "Informes"
 
-with open('Castilla Navarro Zaira ENPS 0720.csv') as csvfile:
+with open('informe1.csv') as csvfile:
     csvReader = csv.reader(csvfile, delimiter=';')
     datos = list(csvReader)
 
