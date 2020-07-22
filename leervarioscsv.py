@@ -4,6 +4,10 @@ import csv
 app = Flask(__name__)
 titulo = "Informes"
 
+estilos = """
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+"""
+
 datos_informes = [] #los datos de todos los informes revisados
 diccionarioInformes = {} #diccionario con datos de todos los informes
 
@@ -46,21 +50,41 @@ def home_www():
         nombre = diccionarioInformes[x]["\ufeffDatosPersonales"]["nombre"]
         apellido = diccionarioInformes[x]["\ufeffDatosPersonales"]["apellido"]
         fecha_ev = diccionarioInformes[x]["\ufeffDatosPersonales"]["fecha_ev"]
-        listado_nombres += "<li>"+apellido+", "+nombre+" ("+fecha_ev+")</li>"
+        edad = (diccionarioInformes[x]["\ufeffDatosPersonales"]["edad_eval"])
+        split = edad.split(",")
+        edad = int(split[0])
+        if edad > 60:
+            grupo="adulto mayor"
+        else:
+            grupo="adulto joven"
+        listado_nombres += "<a href=/pacientes/"+x+" class=list-group-item list-group-item-action>"+apellido+", "+nombre+" ("+fecha_ev+")<span class=badge badge-primary badge-pill>"+grupo+"</span></a>"
     return(f"""
+    {estilos}
     <title>{titulo}</title>
-    <ul>{listado_nombres}</ul>
+    <div class="list-group">{listado_nombres}</div>
     """)
 
 codigos=[]
 for x in diccionarioInformes:
     codigos.append(x)
 
+
+
 @app.route("/pacientes/<string:codigos>")
 def pacientes_www(codigos):
+    nombrecompleto = diccionarioInformes[codigos]["\ufeffDatosPersonales"]["apellido"]+", "+diccionarioInformes[codigos]["\ufeffDatosPersonales"]["nombre"]
+    fechaeval = diccionarioInformes[codigos]["\ufeffDatosPersonales"]["fecha_ev"]
+    datosHTML = ""
+    for key,value, in diccionarioInformes[codigos].items():
+        if len(value)>0:
+            datosHTML += "<div><h1>"+key+"</h1>"
+            for k,v in value.items():
+                datosHTML += "<h2>"+k+": "+v+"<h2>" 
+            datosHTML += "</div>"
     return(f"""
     <title>{titulo}</title>
-    <h1>{codigos}</h1>
+    <ul>{datosHTML}</ul>
+    <h4><a href="/">Volver a inicio</a></h4>
     """)
 
 app.run(host="localhost", port=8080, debug=True)
