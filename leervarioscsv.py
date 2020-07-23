@@ -61,14 +61,30 @@ def home_www():
     return(f"""
     {estilos}
     <title>{titulo}</title>
-    <div class="list-group">{listado_nombres}</div>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/">Explorador de informes</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Buscar" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
+            </form>
+        </div>
+    </nav>
+    <section>
+        <h4 style="padding-left: 20px">Sujetos evaluados</h4>
+        <div class="list-group">{listado_nombres}</div>
+    </section>
     """)
 
 codigos=[]
 for x in diccionarioInformes:
     codigos.append(x)
-
-
 
 @app.route("/pacientes/<string:codigos>")
 def pacientes_www(codigos):
@@ -87,7 +103,7 @@ def pacientes_www(codigos):
     <h4><a href="/">Volver a inicio</a></h4>
     """)
 
-app.run(host="localhost", port=8080, debug=True)
+#app.run(host="localhost", port=8080, debug=True)
 
 
 
