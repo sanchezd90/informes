@@ -19,7 +19,7 @@ for informe in datos_informes:
     dni=informe[1][12]
     codigo = dni+"-"+fecha
     diccionarioInformes[codigo]={}
-    #inicio un loop para explorar las celdas. comienzo explorando las filas
+    #inicio un loop para explorar las celdas. comienzo explorando las filas 
     for x in range(len(informe)):
         #me fijo si la primera celda esta completa, así puedo saber que es fila de etiquetas
         if len(informe[x][0]) > 0:
@@ -30,14 +30,7 @@ for informe in datos_informes:
             #inicio un loop para enumerar los datos de la fila de abajo de la fila que tiene las etiquetas
             for index,item in enumerate(informe[x+1]):
                 #exploro si cada celda tiene un valor
-                if item !="":
+                if index >0:
                     #si la celda tiene valor actualizo el diccionario con la etiqueta como key y el valor como value
                     k=informe[x][index]
                     diccionarioInformes[codigo][key][k]=item
-
-def serialize(fileName,datos):
-    f = open(fileName,"w")
-    f.write("diccionarioInformes="+str(datos))
-    f.close()
-
-serialize("datos.py",diccionarioInformes)
