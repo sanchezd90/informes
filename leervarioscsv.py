@@ -103,7 +103,7 @@ def pacientes_www(codigos):
     <h4><a href="/">Volver a inicio</a></h4>
     """)
 
-#app.run(host="localhost", port=8080, debug=True)
+app.run(host="localhost", port=8080, debug=True)
 
 
 

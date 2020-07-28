@@ -2,7 +2,7 @@ import os
 from flask import Flask, render_template
 import lector
 app = Flask(__name__)
-titulo = "Informes"
+titulo = "Evaluaciones"
 
 diccionarioInformes = lector.diccionarioInformes #diccionario con datos de todos los informes
 
@@ -25,11 +25,15 @@ class Pagina():
              listaSujetos.append(referencia)
         return listaSujetos
 
+class PaginaSujeto():
+    def mostrarDatos(pos):
+        return [sujetos[pos].nombre, sujetos[pos].DNI]
+
 codigos=[]
 for x in diccionarioInformes:
     codigos.append(x)
 
-sujetos = []
+sujetos = [] #lista con las instancias de Sujeto de cada sujeto
 for x in diccionarioInformes:
     dni=diccionarioInformes[x]['\ufeffDatosPersonales']["DNI"]
     nombre=diccionarioInformes[x]['\ufeffDatosPersonales']["nombre"]
@@ -47,6 +51,12 @@ for x in diccionarioInformes:
 @app.route("/")
 def home_www():
     return render_template("index.html", titulo=titulo, sujetos=Pagina.mostrarSujetos())
+
+@app.route("/sujeto/<string:ruta>")
+def sujeto_www(ruta):
+    for n,x in enumerate(sujetos):
+        if x.DNI == ruta:
+            return render_template("sujeto.html", titulo=titulo, datos=PaginaSujeto.mostrarDatos(n))
 
 app.run(host="localhost", port=8080, debug=True)
 
