@@ -1,24 +1,15 @@
-<html>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-    <title>{{titulo}}</title>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="/">Explorador de evaluaciones</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                </ul>
-                <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Buscar" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
-                </form>
-            </div>
-        </nav>
-        <section>
-            {%for x in datos%}
-                <h4 style="padding-left: 20px">{{x}}</h4>
-            {% endfor %}
-        </section>
-</html>
+{% extends "base.html" %}
+{% block content%}
+<section>
+    <div class="container">
+        <h4 >{{datos.apellido}}, {{datos.nombre}}</h4>
+        <h5 ><strong>DNI:</strong> {{datos.DNI}}</h5>
+        <h5 ><strong>Edad:</strong> {{datos.edad}}</h5>
+        <h5 ><strong>Fecha de nacimiento:</strong> {{datos.fechaNac}}</h5>
+        <h5 ><strong>Sexo:</strong> {{"Masculino" if datos.sexo == "1" else "Femenino"}}</h5>
+        <h5 ><strong>Años de educación:</strong> {{datos.escolaridad}}</h5>
+        <h5 ><strong>Preferencia Manual:</strong> {{"Derecha" if datos.pmanual == "1" else "Izquierda"}}</h5>
+    </div>
+    <div class="container"><a class="btn btn-primary" href="/" role="button">Volver a inicio</a></div>
+</section>
+{% endblock content%}

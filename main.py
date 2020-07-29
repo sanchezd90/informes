@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect, url_for
 import lector
 app = Flask(__name__)
 titulo = "Evaluaciones"
@@ -11,7 +11,8 @@ class Sujeto(object):
         self.DNI=dni
         self.nombre=nombre
         self.apellido=apellido
-        self.edad=edad
+        edad = edad.split(",")
+        self.edad = edad[0]
         self.fechaNac=fechaNac
         self.sexo=sexo
         self.escolaridad=escolaridad
@@ -21,13 +22,13 @@ class Pagina():
     def mostrarSujetos():
         listaSujetos = []
         for x in sujetos:
-             referencia= x.apellido+", "+x.nombre
+             referencia= (x.apellido+" "+x.nombre,x.DNI)
              listaSujetos.append(referencia)
         return listaSujetos
 
 class PaginaSujeto():
     def mostrarDatos(pos):
-        return [sujetos[pos].nombre, sujetos[pos].DNI]
+        return sujetos[pos]
 
 codigos=[]
 for x in diccionarioInformes:
@@ -59,7 +60,3 @@ def sujeto_www(ruta):
             return render_template("sujeto.html", titulo=titulo, datos=PaginaSujeto.mostrarDatos(n))
 
 app.run(host="localhost", port=8080, debug=True)
-
-
-
-
