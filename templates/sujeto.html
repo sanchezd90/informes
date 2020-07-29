@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content%}
 <section>
-    <div class="container">
+    <div class="container mt-3">
         <h4 >{{datos.apellido}}, {{datos.nombre}}</h4>
         <h5 ><strong>DNI:</strong> {{datos.DNI}}</h5>
         <h5 ><strong>Edad:</strong> {{datos.edad}}</h5>
@@ -10,6 +10,28 @@
         <h5 ><strong>Años de educación:</strong> {{datos.escolaridad}}</h5>
         <h5 ><strong>Preferencia Manual:</strong> {{"Derecha" if datos.pmanual == "1" else "Izquierda"}}</h5>
     </div>
-    <div class="container"><a class="btn btn-primary" href="/" role="button">Volver a inicio</a></div>
+    <div class="container mt-4">
+        <h4>Evaluaciones</h4>
+    </div>
+    <div class="accordion" id="accordionExample"></div>
+    {% for x in evaluaciones%}
+        <div class="card container">
+            <div class="card-header" id="headingOne">
+            <h2 class="mb-0">
+                <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    {{x[0]}}/{{x[1]}}/{{x[2]}}
+                </button>
+            </h2>
+            </div>
+        
+            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+            <div class="card-body">
+                Acá va la lista de pruebas administradas
+            </div>
+            </div>
+        </div>
+        </div> 
+    {% endfor %}
+    <div class="container mt-4"><a class="btn btn-primary" href="/" role="button">Volver a inicio</a></div>
 </section>
 {% endblock content%}
