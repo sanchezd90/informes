@@ -30,6 +30,25 @@ class PaginaSujeto():
     def mostrarDatos(pos):
         return sujetos[pos]
 
+class Evaluacion():
+    def __init__(self,dni,fechaEv,pruebas):
+        split=fechaEv.split("/")
+        self.fechaEv=split[2]+"-"+split[1]+"-"+split[0]
+        self.codigo = dni+"-"+self.fechaEv
+        self.pruebas = pruebas
+        self.pruebasAdministradas = []
+        for x in self.pruebas:
+            suma = 0
+            for y in self.pruebas[x]:
+                suma += len(self.pruebas[x][y])
+            if suma > 0:
+                self.pruebasAdministradas.append(x)
+    def fueAdministrada(self,pedido):
+        if pedido in self.pruebasAdministradas:
+            return True
+        else:
+            return False
+
 codigos=[]
 for x in diccionarioInformes:
     codigos.append(x)
@@ -48,6 +67,16 @@ for x in diccionarioInformes:
     consentimiento=diccionarioInformes[x]['\ufeffDatosPersonales']["consent"]
     sujetos.append(Sujeto(dni,nombre,apellido,edad,fechaNac,sexo,escolaridad,pmanual,obrasocial,consentimiento))
 
+evaluaciones = []
+for x in diccionarioInformes:
+    dni=diccionarioInformes[x]['\ufeffDatosPersonales']["DNI"]
+    fechaEv=diccionarioInformes[x]['\ufeffDatosPersonales']["fecha_ev"]
+    pruebas={}
+    for y in diccionarioInformes[x]:
+        pruebas.update({y:diccionarioInformes[x][y]})
+    pruebas.pop('\ufeffDatosPersonales')
+    evaluaciones.append(Evaluacion(dni,fechaEv,pruebas))
+
 #home para desplegar nombres de los sujetos evaluados
 @app.route("/")
 def home_www():
@@ -59,4 +88,4 @@ def sujeto_www(ruta):
         if x.DNI == ruta:
             return render_template("sujeto.html", titulo=titulo, datos=PaginaSujeto.mostrarDatos(n))
 
-app.run(host="localhost", port=8080, debug=True)
+#app.run(host="localhost", port=8080, debug=True)
