@@ -1,6 +1,8 @@
-import lector
+import lectorEvaluaciones
+import lectorInformes
 
-diccionarioInformes = lector.diccionarioInformes
+diccionarioEvaluaciones = lectorEvaluaciones.diccionarioEvaluaciones
+diccionarioInformes = lectorInformes.diccionarioInformes
 
 class Sujeto(object):
     def __init__(self,dni,nombre,apellido,edad,fechaNac,sexo,escolaridad,pmanual,obrasocial,consentimiento):
@@ -34,27 +36,61 @@ class Evaluacion():
         else:
             return False
 
+class Informe():
+    def __init__(self,nombre,dni,fechaEv,antecedentes,conclusion):
+        self.nombre = nombre
+        self.dni = dni
+        self.fechaEv = fechaEv
+        self.antecedentes = antecedentes
+        self.conclusion = conclusion
 
 sujetos = [] #lista con las instancias de Sujeto de cada sujeto
-for x in diccionarioInformes:
-    dni=diccionarioInformes[x]['\ufeffDatosPersonales']["DNI"]
-    nombre=diccionarioInformes[x]['\ufeffDatosPersonales']["nombre"]
-    apellido=diccionarioInformes[x]['\ufeffDatosPersonales']["apellido"]
-    edad=diccionarioInformes[x]['\ufeffDatosPersonales']["edad_eval"]
-    fechaNac=diccionarioInformes[x]['\ufeffDatosPersonales']["fecha_nac"]
-    sexo=diccionarioInformes[x]['\ufeffDatosPersonales']["sexo"]
-    escolaridad=diccionarioInformes[x]['\ufeffDatosPersonales']["años_esc"]
-    pmanual=diccionarioInformes[x]['\ufeffDatosPersonales']["pref_manual"]
-    obrasocial=diccionarioInformes[x]['\ufeffDatosPersonales']["obra_social"]
-    consentimiento=diccionarioInformes[x]['\ufeffDatosPersonales']["consent"]
-    sujetos.append(Sujeto(dni,nombre,apellido,edad,fechaNac,sexo,escolaridad,pmanual,obrasocial,consentimiento))
+for x in diccionarioEvaluaciones:
+    if len(sujetos) == 0:
+        dni=diccionarioEvaluaciones[x]['DatosPersonales']["DNI"]
+        nombre=diccionarioEvaluaciones[x]['DatosPersonales']["nombre"]
+        apellido=diccionarioEvaluaciones[x]['DatosPersonales']["apellido"]
+        edad=diccionarioEvaluaciones[x]['DatosPersonales']["edad_eval"]
+        fechaNac=diccionarioEvaluaciones[x]['DatosPersonales']["fecha_nac"]
+        sexo=diccionarioEvaluaciones[x]['DatosPersonales']["sexo"]
+        escolaridad=diccionarioEvaluaciones[x]['DatosPersonales']["años_esc"]
+        pmanual=diccionarioEvaluaciones[x]['DatosPersonales']["pref_manual"]
+        obrasocial=diccionarioEvaluaciones[x]['DatosPersonales']["obra_social"]
+        consentimiento=diccionarioEvaluaciones[x]['DatosPersonales']["consent"]
+        sujetos.append(Sujeto(dni,nombre,apellido,edad,fechaNac,sexo,escolaridad,pmanual,obrasocial,consentimiento))
+    else:
+        for y in sujetos:
+            if diccionarioEvaluaciones[x]['DatosPersonales']["DNI"] != y.DNI:
+                dni=diccionarioEvaluaciones[x]['DatosPersonales']["DNI"]
+                nombre=diccionarioEvaluaciones[x]['DatosPersonales']["nombre"]
+                apellido=diccionarioEvaluaciones[x]['DatosPersonales']["apellido"]
+                edad=diccionarioEvaluaciones[x]['DatosPersonales']["edad_eval"]
+                fechaNac=diccionarioEvaluaciones[x]['DatosPersonales']["fecha_nac"]
+                sexo=diccionarioEvaluaciones[x]['DatosPersonales']["sexo"]
+                escolaridad=diccionarioEvaluaciones[x]['DatosPersonales']["años_esc"]
+                pmanual=diccionarioEvaluaciones[x]['DatosPersonales']["pref_manual"]
+                obrasocial=diccionarioEvaluaciones[x]['DatosPersonales']["obra_social"]
+                consentimiento=diccionarioEvaluaciones[x]['DatosPersonales']["consent"]
+                sujetos.append(Sujeto(dni,nombre,apellido,edad,fechaNac,sexo,escolaridad,pmanual,obrasocial,consentimiento))
+                break
 
 evaluaciones = []
-for x in diccionarioInformes:
-    dni=diccionarioInformes[x]['\ufeffDatosPersonales']["DNI"]
-    fechaEv=diccionarioInformes[x]['\ufeffDatosPersonales']["fecha_ev"]
+for x in diccionarioEvaluaciones:
+    dni=diccionarioEvaluaciones[x]['DatosPersonales']["DNI"]
+    fechaEv=diccionarioEvaluaciones[x]['DatosPersonales']["fecha_ev"]
     pruebas={}
-    for y in diccionarioInformes[x]:
-        pruebas.update({y:diccionarioInformes[x][y]})
-    pruebas.pop('\ufeffDatosPersonales')
+    for y in diccionarioEvaluaciones[x]:
+        pruebas.update({y:diccionarioEvaluaciones[x][y]})
+    pruebas.pop('DatosPersonales')
     evaluaciones.append(Evaluacion(dni,fechaEv,pruebas))
+
+informes = []
+for x in diccionarioInformes:
+    nombre=diccionarioInformes[x]["nombre"]
+    dni=diccionarioInformes[x]["dni"]
+    fechaEv= diccionarioInformes[x]["fechaEv"]
+    antecedentes = diccionarioInformes[x]["antecedentes"]
+    conclusion = diccionarioInformes[x]["conclusion"]
+    informes.append(Informe(nombre,dni,fechaEv,antecedentes,conclusion))
+
+print(informes[0].dni)

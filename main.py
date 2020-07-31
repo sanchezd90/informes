@@ -9,38 +9,35 @@ class Pagina():
     def mostrarSujetos():
         listaSujetos = []
         for x in sujetos:
-             referencia= (x.apellido+" "+x.nombre,x.DNI)
+             referencia= (x.apellido+", "+x.nombre,x.DNI)
              listaSujetos.append(referencia)
-        return listaSujetos
+        return sorted(listaSujetos)
 
 class PaginaSujeto():
     def mostrarDatos(pos):
         return sujetos[pos]
     def mostrarEvaluaciones(pos):
         listaEvaluaciones=[]
+        listaPruebas=[]
         for x in evaluaciones:
             if x.dni == sujetos[pos].DNI:
                 listaEvaluaciones.append(x.fechaSplit)
-        return listaEvaluaciones
+                listaPruebas=x.pruebasAdministradas
+        return (sorted(listaEvaluaciones, reverse=True),listaPruebas)
+    def mostrarInformes(pos):
+        listaInformes=[]
+        for x in informes:
+            if x.dni = sujetos[pos].DNI:
+                listaInformes.append()
 
-class Evaluacion():
-    def __init__(self,dni,fechaEv,pruebas):
-        split=fechaEv.split("/")
-        self.fechaEv=split[2]+"-"+split[1]+"-"+split[0]
-        self.codigo = dni+"-"+self.fechaEv
-        self.pruebas = pruebas
-        self.pruebasAdministradas = []
-        for x in self.pruebas:
-            suma = 0
-            for y in self.pruebas[x]:
-                suma += len(self.pruebas[x][y])
-            if suma > 0:
-                self.pruebasAdministradas.append(x)
-    def fueAdministrada(self,pedido):
-        if pedido in self.pruebasAdministradas:
-            return True
-        else:
-            return False
+"""
+class PaginaEvaluaciones:
+    def mostrarPruebas(dni,codigo):
+        self.dni = dni
+        for x in evaluaciones:
+            if x.DNI == self.dni:
+"""
+
 
 #home para desplegar nombres de los sujetos evaluados
 @app.route("/")
@@ -51,8 +48,11 @@ def home_www():
 def sujeto_www(ruta):
     for n,x in enumerate(sujetos):
         if x.DNI == ruta:
-            return render_template("sujeto.html", titulo=titulo, datos=PaginaSujeto.mostrarDatos(n), evaluaciones=PaginaSujeto.mostrarEvaluaciones(n))
-
-
+            return render_template("sujeto.html", titulo=titulo, datos=PaginaSujeto.mostrarDatos(n), evaluaciones=PaginaSujeto.mostrarEvaluaciones(n)[0], pruebas=PaginaSujeto.mostrarEvaluaciones(n)[1])
+"""
+@app.route("/sujeto/<string:ruta>/<string:codigo>")
+def evaluacion_www(ruta,codigo):
+    return render_template("evaluacion.html", titulo=titulo, pruebas=PaginaEvaluacion.mostrarPruebas(n))
+"""
 
 app.run(host="localhost", port=8080, debug=True)
