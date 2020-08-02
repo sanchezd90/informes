@@ -1,5 +1,6 @@
 import os
 import docx
+import datetime
 
 diccionarioInformes = {}
 
@@ -31,9 +32,13 @@ def getText(filename):
     for x in range(inicioConclusion,finConclusion):
         conclusion += fullText[x]
     split = fechaEv.split("/")
+    year=split[2]
+    month=split[1]
+    day=split[0]
     fechaInv = split[2][-2]+split[2][-1]+"-"+split[1]+"-"+split[0]
+    date=datetime.datetime(int(year),int(month),int(day))
     codigo = dni+"-"+fechaInv
-    diccionarioInformes[codigo]={"nombre":nombre,"dni":dni,"fechaEv":fechaEv,"antecedentes":antecedentes,"conclusion":conclusion}
+    diccionarioInformes[codigo]={"nombre":nombre,"dni":dni,"fechaEv":date,"antecedentes":antecedentes,"conclusion":conclusion}
 
 #loop para revisar archivos csv y agregar datos a datos_informes
 for archivo in os.listdir('.'):

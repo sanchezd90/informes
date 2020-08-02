@@ -1,5 +1,6 @@
 import lectorEvaluaciones
 import lectorInformes
+import datetime
 
 diccionarioEvaluaciones = lectorEvaluaciones.diccionarioEvaluaciones
 diccionarioInformes = lectorInformes.diccionarioInformes
@@ -11,17 +12,18 @@ class Sujeto(object):
         self.apellido=apellido
         edad = edad.split(",")
         self.edad = edad[0]
-        self.fechaNac=fechaNac
+        self.fechaNac= fechaNac
         self.sexo=sexo
         self.escolaridad=escolaridad
         self.pmanual=pmanual
+        self.informes = []
+        self.evaluaciones = []
 
 class Evaluacion():
     def __init__(self,dni,fechaEv,pruebas):
-        self.fechaSplit=fechaEv.split("/")
+        self.fechaEv = fechaEv
         self.dni = dni
-        self.fechaEv=self.fechaSplit[2]+"-"+self.fechaSplit[1]+"-"+self.fechaSplit[0]
-        self.codigo = dni+"-"+self.fechaEv
+        self.codigo = dni+"-"+self.fechaEv.strftime("%y")+"-"+self.fechaEv.strftime("%m")+"-"+self.fechaEv.strftime("%d")
         self.pruebas = pruebas
         self.pruebasAdministradas = []
         for x in self.pruebas:
@@ -51,7 +53,12 @@ for x in diccionarioEvaluaciones:
         nombre=diccionarioEvaluaciones[x]['DatosPersonales']["nombre"]
         apellido=diccionarioEvaluaciones[x]['DatosPersonales']["apellido"]
         edad=diccionarioEvaluaciones[x]['DatosPersonales']["edad_eval"]
-        fechaNac=diccionarioEvaluaciones[x]['DatosPersonales']["fecha_nac"]
+        splitFechaNac=diccionarioEvaluaciones[x]['DatosPersonales']["fecha_nac"].split("/")
+        if splitFechaNac[2] == "00":
+            splitFechaNac[2] = "1900"
+        if splitFechaNac[0] == "0":
+            splitFechaNac[0] = "1"
+        fechaNac=datetime.datetime(int(splitFechaNac[2]),int(splitFechaNac[1]),int(splitFechaNac[0]))
         sexo=diccionarioEvaluaciones[x]['DatosPersonales']["sexo"]
         escolaridad=diccionarioEvaluaciones[x]['DatosPersonales']["años_esc"]
         pmanual=diccionarioEvaluaciones[x]['DatosPersonales']["pref_manual"]
@@ -65,7 +72,12 @@ for x in diccionarioEvaluaciones:
                 nombre=diccionarioEvaluaciones[x]['DatosPersonales']["nombre"]
                 apellido=diccionarioEvaluaciones[x]['DatosPersonales']["apellido"]
                 edad=diccionarioEvaluaciones[x]['DatosPersonales']["edad_eval"]
-                fechaNac=diccionarioEvaluaciones[x]['DatosPersonales']["fecha_nac"]
+                splitFechaNac=diccionarioEvaluaciones[x]['DatosPersonales']["fecha_nac"].split("/")
+                if splitFechaNac[2] == "00":
+                    splitFechaNac[2] = "1900"
+                if splitFechaNac[0] == "0":
+                    splitFechaNac[0] = "1"
+                fechaNac=datetime.datetime(int(splitFechaNac[2]),int(splitFechaNac[1]),int(splitFechaNac[0]))
                 sexo=diccionarioEvaluaciones[x]['DatosPersonales']["sexo"]
                 escolaridad=diccionarioEvaluaciones[x]['DatosPersonales']["años_esc"]
                 pmanual=diccionarioEvaluaciones[x]['DatosPersonales']["pref_manual"]
@@ -77,7 +89,8 @@ for x in diccionarioEvaluaciones:
 evaluaciones = []
 for x in diccionarioEvaluaciones:
     dni=diccionarioEvaluaciones[x]['DatosPersonales']["DNI"]
-    fechaEv=diccionarioEvaluaciones[x]['DatosPersonales']["fecha_ev"]
+    splitfechaEv=diccionarioEvaluaciones[x]['DatosPersonales']["fecha_ev"].split("/")
+    fechaEv=datetime.datetime(int("20"+splitfechaEv[2]),int(splitfechaEv[1]),int(splitfechaEv[0]))
     pruebas={}
     for y in diccionarioEvaluaciones[x]:
         pruebas.update({y:diccionarioEvaluaciones[x][y]})
@@ -93,4 +106,11 @@ for x in diccionarioInformes:
     conclusion = diccionarioInformes[x]["conclusion"]
     informes.append(Informe(nombre,dni,fechaEv,antecedentes,conclusion))
 
-print(informes[0].dni)
+for x in sujetos:
+    for y in informes:
+        if x.DNI == y.dni:
+            x.informes.append(y)
+    for z in evaluaciones:
+        if x.DNI == z.dni:
+            x.evaluaciones.append(z)
+
