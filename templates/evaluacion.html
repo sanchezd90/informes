@@ -1,28 +1,16 @@
 {% extends "base.html" %}
 {% block content%}
-    <div class="accordion" id="accordionExample"></div>
-    {% for x in pruebas%}
-        <div class="card container">
-            <div class="card-header" id="headingOne">
-            <h2 class="mb-0">
-                <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                    {{x[0]}}/{{x[1]}}/{{x[2]}}
-                </button>
-            </h2>
-            </div>
-        
-            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-            <div class="card-body">
-                <ul>
-                    {% for y in pruebas[y]%}
-                        <li>{{y}}</li>
-                    {% endfor%}
-                </ul>
-            </div>
-            </div>
-        </div>
-        </div> 
-    {% endfor %}
+<section>
+    <div class="container mt-3">
+        <h4 >{{datosSujeto.apellido}}, {{datosSujeto.nombre}}</h4>
+        <h5 ><strong>DNI:</strong> {{datosSujeto.DNI}}</h5>
+        <h5 ><strong>Fecha de nacimiento:</strong> {{datosSujeto.fechaNac.strftime("%d")}}/{{datosSujeto.fechaNac.strftime("%m")}}/{{datosSujeto.fechaNac.strftime("%y")}}</h5>
+        <h5 ><strong>Edad al momento de la evaluación:</strong> {{datosEvaluacion.datosPersonales["edad_eval"].rstrip(",00")}}</h5>
+        <h5 ><strong>Sexo:</strong> {{"Masculino" if datosSujeto.sexo == "1" else "Femenino"}}</h5>
+        <h5 ><strong>Años de educación al momento de evaluar:</strong> {{datosEvaluacion.datosPersonales["años_esc"]}}</h5>
+        <h5 ><strong>Preferencia Manual:</strong> {{"Derecha" if datosSujeto.pmanual == "1" else "Izquierda"}}</h5>
+    </div>
+    <div class="container mt-4"><a class="btn btn-primary" href="/sujetos/{{datosSujeto.DNI}}" role="button">Volver a todas las evaluaciones</a></div>
     <div class="container mt-4"><a class="btn btn-primary" href="/" role="button">Volver a inicio</a></div>
 </section>
 {% endblock content%}

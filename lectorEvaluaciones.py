@@ -15,6 +15,9 @@ for archivo in os.listdir('.'):
 #loop para armar diccionarios con la información de cada informe. La info va a diccionarioInformes
 for informe in datos_evaluaciones:
     split=informe[1][11].split("/")
+    for i,s in enumerate(split):
+        if len(s)<2:
+            split[i]="0"+split[i]
     fecha=split[2]+"-"+split[1]+"-"+split[0]
     dni=informe[1][12]
     codigo = dni+"-"+fecha

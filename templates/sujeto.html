@@ -5,7 +5,7 @@
         <h4 >{{datos.apellido}}, {{datos.nombre}}</h4>
         <h5 ><strong>DNI:</strong> {{datos.DNI}}</h5>
         <h5 ><strong>Edad:</strong> {{datos.edad}}</h5>
-        <h5 ><strong>Fecha de nacimiento:</strong> {{datos.fechaNac}}</h5>
+        <h5 ><strong>Fecha de nacimiento:</strong> {{datos.fechaNac.strftime("%d")}}/{{datos.fechaNac.strftime("%m")}}/{{datos.fechaNac.strftime("%y")}}</h5>
         <h5 ><strong>Sexo:</strong> {{"Masculino" if datos.sexo == "1" else "Femenino"}}</h5>
         <h5 ><strong>Años de educación:</strong> {{datos.escolaridad}}</h5>
         <h5 ><strong>Preferencia Manual:</strong> {{"Derecha" if datos.pmanual == "1" else "Izquierda"}}</h5>
@@ -27,6 +27,7 @@
             <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
             <div class="card-body">
                 <p>{{x[1]}}</p>
+                <h5><a href="/evaluaciones/{{codigo}}">Ver datos evaluación</a></h5>
             </div>
             </div>
         </div>

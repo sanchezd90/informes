@@ -20,10 +20,11 @@ class Sujeto(object):
         self.evaluaciones = []
 
 class Evaluacion():
-    def __init__(self,dni,fechaEv,pruebas):
+    def __init__(self,dni,fechaEv,pruebas,datosPersonales):
         self.fechaEv = fechaEv
         self.dni = dni
         self.codigo = dni+"-"+self.fechaEv.strftime("%y")+"-"+self.fechaEv.strftime("%m")+"-"+self.fechaEv.strftime("%d")
+        self.datosPersonales=datosPersonales
         self.pruebas = pruebas
         self.pruebasAdministradas = []
         for x in self.pruebas:
@@ -46,7 +47,7 @@ class Informe():
         self.antecedentes = antecedentes
         self.conclusion = conclusion
 
-sujetos = [] #lista con las instancias de Sujeto de cada sujeto
+sujetos = {} #lista con las instancias de Sujeto de cada sujeto
 for x in diccionarioEvaluaciones:
     if len(sujetos) == 0:
         dni=diccionarioEvaluaciones[x]['DatosPersonales']["DNI"]
@@ -64,10 +65,10 @@ for x in diccionarioEvaluaciones:
         pmanual=diccionarioEvaluaciones[x]['DatosPersonales']["pref_manual"]
         obrasocial=diccionarioEvaluaciones[x]['DatosPersonales']["obra_social"]
         consentimiento=diccionarioEvaluaciones[x]['DatosPersonales']["consent"]
-        sujetos.append(Sujeto(dni,nombre,apellido,edad,fechaNac,sexo,escolaridad,pmanual,obrasocial,consentimiento))
+        sujetos[x]=Sujeto(dni,nombre,apellido,edad,fechaNac,sexo,escolaridad,pmanual,obrasocial,consentimiento)
     else:
-        for y in sujetos:
-            if diccionarioEvaluaciones[x]['DatosPersonales']["DNI"] != y.DNI:
+        for k,v in sujetos.items():
+            if diccionarioEvaluaciones[x]['DatosPersonales']["DNI"] != v.DNI:
                 dni=diccionarioEvaluaciones[x]['DatosPersonales']["DNI"]
                 nombre=diccionarioEvaluaciones[x]['DatosPersonales']["nombre"]
                 apellido=diccionarioEvaluaciones[x]['DatosPersonales']["apellido"]
@@ -83,34 +84,39 @@ for x in diccionarioEvaluaciones:
                 pmanual=diccionarioEvaluaciones[x]['DatosPersonales']["pref_manual"]
                 obrasocial=diccionarioEvaluaciones[x]['DatosPersonales']["obra_social"]
                 consentimiento=diccionarioEvaluaciones[x]['DatosPersonales']["consent"]
-                sujetos.append(Sujeto(dni,nombre,apellido,edad,fechaNac,sexo,escolaridad,pmanual,obrasocial,consentimiento))
+                sujetos[x]=Sujeto(dni,nombre,apellido,edad,fechaNac,sexo,escolaridad,pmanual,obrasocial,consentimiento)
                 break
 
-evaluaciones = []
+evaluaciones = {}
 for x in diccionarioEvaluaciones:
     dni=diccionarioEvaluaciones[x]['DatosPersonales']["DNI"]
     splitfechaEv=diccionarioEvaluaciones[x]['DatosPersonales']["fecha_ev"].split("/")
+    for i,s in enumerate(splitfechaEv):
+        if len(s)<2:
+            splitfechaEv[i]="0"+splitfechaEv[i]
+    codigo=dni+"-"+splitfechaEv[2]+"-"+splitfechaEv[1]+"-"+splitfechaEv[0]
     fechaEv=datetime.datetime(int("20"+splitfechaEv[2]),int(splitfechaEv[1]),int(splitfechaEv[0]))
     pruebas={}
     for y in diccionarioEvaluaciones[x]:
         pruebas.update({y:diccionarioEvaluaciones[x][y]})
     pruebas.pop('DatosPersonales')
-    evaluaciones.append(Evaluacion(dni,fechaEv,pruebas))
+    datosPersonales=diccionarioEvaluaciones[x]['DatosPersonales']
+    evaluaciones[codigo]=Evaluacion(dni,fechaEv,pruebas,datosPersonales)
 
-informes = []
+informes = {}
 for x in diccionarioInformes:
     nombre=diccionarioInformes[x]["nombre"]
     dni=diccionarioInformes[x]["dni"]
     fechaEv= diccionarioInformes[x]["fechaEv"]
+    codigo=dni+"-"+fechaEv.strftime("%y")+"-"+fechaEv.strftime("%m")+"-"+fechaEv.strftime("%d")
     antecedentes = diccionarioInformes[x]["antecedentes"]
     conclusion = diccionarioInformes[x]["conclusion"]
-    informes.append(Informe(nombre,dni,fechaEv,antecedentes,conclusion))
+    informes[codigo]=Informe(nombre,dni,fechaEv,antecedentes,conclusion)
 
 for x in sujetos:
     for y in informes:
-        if x.DNI == y.dni:
-            x.informes.append(y)
+        if sujetos[x].DNI == informes[y].dni:
+            sujetos[x].informes.append(informes[y])
     for z in evaluaciones:
-        if x.DNI == z.dni:
-            x.evaluaciones.append(z)
-
+        if sujetos[x].DNI == evaluaciones[z].dni:
+            sujetos[x].evaluaciones.append(evaluaciones[z])
