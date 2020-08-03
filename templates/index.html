@@ -1,7 +1,35 @@
 {% extends "base.html" %}
 {% block content%}
 <section class="container mt-3">
-    <h4>Sujetos evaluados</h4>
+    <h4>Evaluaciones de la última semana</h4>
+    <div>
+        {%for x in evSemana%}
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+              <h5 class="card-title">{{x[0]}}</h5>
+              <p class="card-text">{{x[1]}}</p>
+              <a href="/evaluaciones/{{x[2]}}" class="btn btn-primary">Ver evaluacion</a>
+            </div>
+          </div>
+        {% endfor %}
+    </div>
+</section>
+<section class="container mt-3">
+    <h4>Evaluaciones del último mes</h4>
+    <div>
+        {%for x in evMes%}
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+              <h5 class="card-title">{{x[0]}}</h5>
+              <p class="card-text">{{x[1]}}</p>
+              <a href="/evaluaciones/{{x[2]}}" class="btn btn-primary">Ver evaluacion</a>
+            </div>
+          </div>
+        {% endfor %}
+    </div>
+</section>
+<section class="container mt-3">
+    <h4>Todos los sujetos evaluados</h4>
     <div>
         {%for x in sujetos%}
             <h5><a href="/sujetos/{{x[1]}}">{{x[0]}}</a></h5>

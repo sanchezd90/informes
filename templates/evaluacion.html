@@ -4,13 +4,40 @@
     <div class="container mt-3">
         <h4 >{{datosSujeto.apellido}}, {{datosSujeto.nombre}}</h4>
         <h5 ><strong>DNI:</strong> {{datosSujeto.DNI}}</h5>
-        <h5 ><strong>Fecha de nacimiento:</strong> {{datosSujeto.fechaNac.strftime("%d")}}/{{datosSujeto.fechaNac.strftime("%m")}}/{{datosSujeto.fechaNac.strftime("%y")}}</h5>
+        <h5 ><strong>Fecha de nacimiento:</strong> {{datosSujeto.fechaNac.strftime("%x")}}</h5>
         <h5 ><strong>Edad al momento de la evaluación:</strong> {{datosEvaluacion.datosPersonales["edad_eval"].rstrip(",00")}}</h5>
         <h5 ><strong>Sexo:</strong> {{"Masculino" if datosSujeto.sexo == "1" else "Femenino"}}</h5>
         <h5 ><strong>Años de educación al momento de evaluar:</strong> {{datosEvaluacion.datosPersonales["años_esc"]}}</h5>
         <h5 ><strong>Preferencia Manual:</strong> {{"Derecha" if datosSujeto.pmanual == "1" else "Izquierda"}}</h5>
+        <h5 ><strong>Fecha de evaluación:</strong> {{datosEvaluacion.fechaEv.strftime("%x")}}</h5>
     </div>
-    <div class="container mt-4"><a class="btn btn-primary" href="/sujetos/{{datosSujeto.DNI}}" role="button">Volver a todas las evaluaciones</a></div>
+    <div class="accordion container mt-5" id="accordionExample">
+        <h4>Pruebas administradas</h4>
+        {% for x in pruebas%}
+        <div class="card">
+          <div class="card-header" id="headingOne">
+            <h2 class="mb-0">
+              <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                {{x}}
+              </button>
+            </h2>
+          </div>
+      
+          <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+            <div class="card-body">
+                <ul>
+                    {% for y in pruebas[x]%}
+                    {% if pruebas[x][y] != "" %}
+                    <li>{{y}}: {{pruebas[x][y]}} </li>
+                    {% endif %}
+                    {% endfor%}
+                    </ul>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    <div class="container mt-4"><a class="btn btn-primary" href="/sujetos/{{datosSujeto.DNI}}" role="button">Ver evaluaciones del sujeto</a></div>
     <div class="container mt-4"><a class="btn btn-primary" href="/" role="button">Volver a inicio</a></div>
 </section>
 {% endblock content%}

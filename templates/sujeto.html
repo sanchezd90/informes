@@ -5,7 +5,7 @@
         <h4 >{{datos.apellido}}, {{datos.nombre}}</h4>
         <h5 ><strong>DNI:</strong> {{datos.DNI}}</h5>
         <h5 ><strong>Edad:</strong> {{datos.edad}}</h5>
-        <h5 ><strong>Fecha de nacimiento:</strong> {{datos.fechaNac.strftime("%d")}}/{{datos.fechaNac.strftime("%m")}}/{{datos.fechaNac.strftime("%y")}}</h5>
+        <h5 ><strong>Fecha de nacimiento:</strong> {{datos.fechaNac.strftime("%x")}}</h5>
         <h5 ><strong>Sexo:</strong> {{"Masculino" if datos.sexo == "1" else "Femenino"}}</h5>
         <h5 ><strong>Años de educación:</strong> {{datos.escolaridad}}</h5>
         <h5 ><strong>Preferencia Manual:</strong> {{"Derecha" if datos.pmanual == "1" else "Izquierda"}}</h5>
@@ -13,7 +13,7 @@
     <div class="container mt-4">
         <h4>Evaluaciones</h4>
     </div>
-    <div class="accordion" id="accordionExample"></div>
+    <div class="accordion" id="accordionExample">
     {% for x in abstractEvaluaciones%}
         <div class="card container">
             <div class="card-header" id="headingOne">
@@ -31,8 +31,8 @@
             </div>
             </div>
         </div>
-        </div> 
     {% endfor %}
+    </div> 
     <div class="container mt-4"><a class="btn btn-primary" href="/" role="button">Volver a inicio</a></div>
 </section>
 {% endblock content%}

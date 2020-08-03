@@ -1,18 +1,35 @@
 from flask import Flask, render_template, redirect, url_for
-from instanciador import sujetos as sujetos
-from instanciador import evaluaciones as evaluaciones
-from datetime import datetime
+from instanciador import sujetos
+from instanciador import evaluaciones
+from instanciador import informes
+from datetime import datetime, date
 
 app = Flask(__name__)
 titulo = "Evaluaciones"
 
 class Pagina():
-    def mostrarSujetos():
+    def todosSujetos():
         listaSujetos = []
         for x in sujetos:
              referencia= (sujetos[x].apellido+", "+sujetos[x].nombre,sujetos[x].DNI)
              listaSujetos.append(referencia)
         return sorted(listaSujetos)
+    def evaluacionesSemana():
+        evaluacionesSemana = []
+        for x in evaluaciones:
+            if (datetime.now() - evaluaciones[x].fechaEv).days <= 7:
+                nombreCompleto= evaluaciones[x].datosPersonales["apellido"]+", "+evaluaciones[x].datosPersonales["nombre"]
+                fecha = evaluaciones[x].fechaEv.strftime("%x")
+                evaluacionesSemana.append((nombreCompleto,fecha,x))
+        return evaluacionesSemana
+    def evaluacionesMes():
+        evaluacionesMes = []
+        for x in evaluaciones:
+            if (datetime.now() - evaluaciones[x].fechaEv).days <=30:
+                nombreCompleto= evaluaciones[x].datosPersonales["apellido"]+", "+evaluaciones[x].datosPersonales["nombre"]
+                fecha = evaluaciones[x].fechaEv.strftime("%x")
+                evaluacionesMes.append((nombreCompleto,fecha,x))
+        return evaluacionesMes
 
 class PaginaSujeto():
     def __init__(self,sujeto):
@@ -35,12 +52,17 @@ class PaginaEvaluaciones(PaginaSujeto):
     def __init__(self,sujeto,evaluacion):
         super().__init__(sujeto)
         self.evaluacion = evaluacion
-        self.pruebas= evaluacion.pruebasAdministradas
+        self.pruebasAdministradas = evaluacion.pruebasAdministradas
+    def pruebasAdmin(self):
+        lista={}
+        for x in self.pruebasAdministradas:
+            lista[x]=self.evaluacion.pruebas[x]
+        return lista
 
 #home para desplegar nombres de los sujetos evaluados
 @app.route("/")
 def home_www():
-    return render_template("index.html", titulo=titulo, sujetos=Pagina.mostrarSujetos())
+    return render_template("index.html", titulo=titulo, sujetos=Pagina.todosSujetos(), evSemana=Pagina.evaluacionesSemana(), evMes=Pagina.evaluacionesMes())
 
 @app.route("/sujetos/<string:dni>")
 def sujeto_www(dni):
@@ -54,6 +76,6 @@ def evaluacion_www(codigo):
     for x in evaluaciones:
         if x == codigo:
             pagina=PaginaEvaluaciones(sujetos[x],evaluaciones[x])
-            return render_template("evaluacion.html", titulo=titulo, datosSujeto=pagina.sujeto, datosEvaluacion=pagina.evaluacion, pruebas=pagina.pruebas)
+            return render_template("evaluacion.html", titulo=titulo, datosSujeto=pagina.sujeto, datosEvaluacion=pagina.evaluacion, pruebas=pagina.pruebasAdmin())
 
 app.run(host="localhost", port=8080, debug=True)
