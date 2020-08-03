@@ -11,6 +11,7 @@
         <h5 ><strong>Preferencia Manual:</strong> {{"Derecha" if datosSujeto.pmanual == "1" else "Izquierda"}}</h5>
         <h5 ><strong>Fecha de evaluación:</strong> {{datosEvaluacion.fechaEv.strftime("%x")}}</h5>
     </div>
+    <div class="container mt-4"><a class="btn btn-primary" href="/sujetos/{{datosSujeto.DNI}}" role="button">Ver evaluaciones del sujeto</a></div>
     <div class="accordion container mt-5" id="accordionExample">
         <h4>Pruebas administradas</h4>
         {% for x in pruebas%}
@@ -37,7 +38,6 @@
         </div>
         {% endfor %}
       </div>
-    <div class="container mt-4"><a class="btn btn-primary" href="/sujetos/{{datosSujeto.DNI}}" role="button">Ver evaluaciones del sujeto</a></div>
     <div class="container mt-4"><a class="btn btn-primary" href="/" role="button">Volver a inicio</a></div>
 </section>
 {% endblock content%}

@@ -1,39 +1,34 @@
 {% extends "base.html" %}
 {% block content%}
-<section class="container mt-3">
-    <h4>Evaluaciones de la última semana</h4>
-    <div>
-        {%for x in evSemana%}
-        <div class="card" style="width: 18rem;">
-            <div class="card-body">
-              <h5 class="card-title">{{x[0]}}</h5>
-              <p class="card-text">{{x[1]}}</p>
-              <a href="/evaluaciones/{{x[2]}}" class="btn btn-primary">Ver evaluacion</a>
-            </div>
-          </div>
-        {% endfor %}
+<div class="container mt-4">
+  <h4>Evaluaciones recientes</h4>
+  <div class="row mt-2">
+    {% for x in range(4) %}
+    <div class="col-sm-3">
+      <a href="/evaluaciones/{{evRecientes[x][2]}}">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">{{evRecientes[x][1]}}</h5>
+          <p class="card-text">{{evRecientes[x][0]}}</p>
+        </div>
+      </div>
+      </a>
     </div>
-</section>
-<section class="container mt-3">
-    <h4>Evaluaciones del último mes</h4>
-    <div>
-        {%for x in evMes%}
-        <div class="card" style="width: 18rem;">
-            <div class="card-body">
-              <h5 class="card-title">{{x[0]}}</h5>
-              <p class="card-text">{{x[1]}}</p>
-              <a href="/evaluaciones/{{x[2]}}" class="btn btn-primary">Ver evaluacion</a>
-            </div>
-          </div>
-        {% endfor %}
+    {% endfor %}
+  </div>
+  <div class="row mt-2">
+    {% for x in range(4,8) %}
+    <div class="col-sm-3">
+      <a href="/evaluaciones/{{evRecientes[x][2]}}">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">{{evRecientes[x][1]}}</h5>
+          <p class="card-text">{{evRecientes[x][0]}}</p>
+        </div>
+      </div>
+      </a>
     </div>
-</section>
-<section class="container mt-3">
-    <h4>Todos los sujetos evaluados</h4>
-    <div>
-        {%for x in sujetos%}
-            <h5><a href="/sujetos/{{x[1]}}">{{x[0]}}</a></h5>
-        {% endfor %}
-    </div>
-</section>
+    {% endfor %}
+  </div>
+</div>
 {% endblock content%}

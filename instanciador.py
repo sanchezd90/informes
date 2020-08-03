@@ -16,8 +16,8 @@ class Sujeto(object):
         self.sexo=sexo
         self.escolaridad=escolaridad
         self.pmanual=pmanual
-        self.informes = []
-        self.evaluaciones = []
+        self.informes = {}
+        self.evaluaciones = {}
 
 class Evaluacion():
     def __init__(self,dni,fechaEv,pruebas,datosPersonales):
@@ -65,7 +65,7 @@ for x in diccionarioEvaluaciones:
         pmanual=diccionarioEvaluaciones[x]['DatosPersonales']["pref_manual"]
         obrasocial=diccionarioEvaluaciones[x]['DatosPersonales']["obra_social"]
         consentimiento=diccionarioEvaluaciones[x]['DatosPersonales']["consent"]
-        sujetos[x]=Sujeto(dni,nombre,apellido,edad,fechaNac,sexo,escolaridad,pmanual,obrasocial,consentimiento)
+        sujetos[x[0:x.find("-")]]=Sujeto(dni,nombre,apellido,edad,fechaNac,sexo,escolaridad,pmanual,obrasocial,consentimiento)
     else:
         for k,v in sujetos.items():
             if diccionarioEvaluaciones[x]['DatosPersonales']["DNI"] != v.DNI:
@@ -84,7 +84,7 @@ for x in diccionarioEvaluaciones:
                 pmanual=diccionarioEvaluaciones[x]['DatosPersonales']["pref_manual"]
                 obrasocial=diccionarioEvaluaciones[x]['DatosPersonales']["obra_social"]
                 consentimiento=diccionarioEvaluaciones[x]['DatosPersonales']["consent"]
-                sujetos[x]=Sujeto(dni,nombre,apellido,edad,fechaNac,sexo,escolaridad,pmanual,obrasocial,consentimiento)
+                sujetos[x[0:x.find("-")]]=Sujeto(dni,nombre,apellido,edad,fechaNac,sexo,escolaridad,pmanual,obrasocial,consentimiento)
                 break
 
 evaluaciones = {}
@@ -116,7 +116,7 @@ for x in diccionarioInformes:
 for x in sujetos:
     for y in informes:
         if sujetos[x].DNI == informes[y].dni:
-            sujetos[x].informes.append(informes[y])
+            sujetos[x].informes.update({y:informes[y]})
     for z in evaluaciones:
         if sujetos[x].DNI == evaluaciones[z].dni:
-            sujetos[x].evaluaciones.append(evaluaciones[z])
+            sujetos[x].evaluaciones.update({z:evaluaciones[z]})

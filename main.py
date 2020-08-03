@@ -14,38 +14,29 @@ class Pagina():
              referencia= (sujetos[x].apellido+", "+sujetos[x].nombre,sujetos[x].DNI)
              listaSujetos.append(referencia)
         return sorted(listaSujetos)
-    def evaluacionesSemana():
-        evaluacionesSemana = []
+    def evaluacionesRecientes():
+        evaluacionesRecientes = []
         for x in evaluaciones:
-            if (datetime.now() - evaluaciones[x].fechaEv).days <= 7:
-                nombreCompleto= evaluaciones[x].datosPersonales["apellido"]+", "+evaluaciones[x].datosPersonales["nombre"]
-                fecha = evaluaciones[x].fechaEv.strftime("%x")
-                evaluacionesSemana.append((nombreCompleto,fecha,x))
-        return evaluacionesSemana
-    def evaluacionesMes():
-        evaluacionesMes = []
-        for x in evaluaciones:
-            if (datetime.now() - evaluaciones[x].fechaEv).days <=30:
-                nombreCompleto= evaluaciones[x].datosPersonales["apellido"]+", "+evaluaciones[x].datosPersonales["nombre"]
-                fecha = evaluaciones[x].fechaEv.strftime("%x")
-                evaluacionesMes.append((nombreCompleto,fecha,x))
-        return evaluacionesMes
+            nombreCompleto= evaluaciones[x].datosPersonales["apellido"]+", "+evaluaciones[x].datosPersonales["nombre"]
+            fecha = evaluaciones[x].fechaEv.strftime("%x")
+            evaluacionesRecientes.append((fecha,nombreCompleto,x))
+        return sorted(evaluacionesRecientes,reverse=True)
 
 class PaginaSujeto():
     def __init__(self,sujeto):
         self.sujeto = sujeto
     def mostrarAbstractEvaluaciones(self):
         abstractEvaluaciones=[]
-        for i,x in enumerate(self.sujeto.evaluaciones):
-            stringFecha = self.sujeto.evaluaciones[i].fechaEv.strftime("%d")+"/"+self.sujeto.evaluaciones[i].fechaEv.strftime("%m")+"/"+self.sujeto.evaluaciones[i].fechaEv.strftime("%y")
+        for x in self.sujeto.evaluaciones:
+            stringFecha = self.sujeto.evaluaciones[x].fechaEv.strftime("%d")+"/"+self.sujeto.evaluaciones[x].fechaEv.strftime("%m")+"/"+self.sujeto.evaluaciones[x].fechaEv.strftime("%y")
             if len(self.sujeto.informes) > 0:
-                for j,y in enumerate(self.sujeto.informes):
-                        if self.sujeto.evaluaciones[i].fechaEv == self.sujeto.informes[j].fechaEv:
-                            abstractEvaluaciones.append((stringFecha,self.sujeto.informes[j].conclusion))
+                for y in self.sujeto.informes:
+                        if self.sujeto.evaluaciones[y].fechaEv == self.sujeto.informes[y].fechaEv:
+                            abstractEvaluaciones.append((stringFecha,self.sujeto.informes[y].conclusion,x))
                         else:
-                            abstractEvaluaciones.append((stringFecha,"No hay datos de informe disponibles"))
+                            abstractEvaluaciones.append((stringFecha,"No hay datos de informe disponibles",x))
             else:
-                abstractEvaluaciones.append((stringFecha,"No hay datos de informe disponibles"))
+                abstractEvaluaciones.append((stringFecha,"No hay datos de informe disponibles",x))
         return (sorted(abstractEvaluaciones, reverse=True))
 
 class PaginaEvaluaciones(PaginaSujeto):
@@ -62,20 +53,20 @@ class PaginaEvaluaciones(PaginaSujeto):
 #home para desplegar nombres de los sujetos evaluados
 @app.route("/")
 def home_www():
-    return render_template("index.html", titulo=titulo, sujetos=Pagina.todosSujetos(), evSemana=Pagina.evaluacionesSemana(), evMes=Pagina.evaluacionesMes())
+    return render_template("index.html", titulo=titulo, sujetos=Pagina.todosSujetos(), evRecientes=Pagina.evaluacionesRecientes())
 
 @app.route("/sujetos/<string:dni>")
 def sujeto_www(dni):
     for x in sujetos:
-        if sujetos[x].DNI == dni:
+        if x == dni:
             pagina=PaginaSujeto(sujetos[x])
-            return render_template("sujeto.html", titulo=titulo, datos=pagina.sujeto, abstractEvaluaciones=pagina.mostrarAbstractEvaluaciones(), codigo=x)
+            return render_template("sujeto.html", titulo=titulo, datos=pagina.sujeto, abstractEvaluaciones=pagina.mostrarAbstractEvaluaciones())
 
 @app.route("/evaluaciones/<string:codigo>")
 def evaluacion_www(codigo):
     for x in evaluaciones:
         if x == codigo:
-            pagina=PaginaEvaluaciones(sujetos[x],evaluaciones[x])
+            pagina=PaginaEvaluaciones(sujetos[x[0:x.find("-")]],evaluaciones[x])
             return render_template("evaluacion.html", titulo=titulo, datosSujeto=pagina.sujeto, datosEvaluacion=pagina.evaluacion, pruebas=pagina.pruebasAdmin())
 
 app.run(host="localhost", port=8080, debug=True)
