@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content%}
+<h3>Resultados de la búsqueda</h3>
+{% if resultados == []%}
+    <h4>No hay resultados para esta búsqueda</h3>
+{% else %}
+    <ul>
+    {% for x in resultados %}
+        <li><a href="/evaluaciones/{{x.codigo}}">{{x.nombreCompleto}} ({{x.fechaEv.strftime("%x")}})</li>
+    {% endfor %}
+    </ul>
+{% endif %}
+{% endblock content%}

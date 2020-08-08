@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for
+from flask import Flask, render_template, redirect, url_for, request
 from instanciador import sujetos
 from instanciador import evaluaciones
 from instanciador import informes
@@ -50,8 +50,21 @@ class PaginaEvaluaciones(PaginaSujeto):
             lista[x]=self.evaluacion.pruebas[x]
         return lista
 
+class PaginaResultados(Pagina):
+    def __init__(self,termino,sujetos,informes,evaluaciones):
+        self.termino = termino
+        self.sujetos=sujetos
+        self.evaluaciones = evaluaciones
+        self.informes = informes
+    def filtroPruebas(self):
+        resultados = []
+        for x in self.evaluaciones:
+            if self.termino in self.evaluaciones[x].pruebasAdministradas:
+                resultados.append(self.evaluaciones[x])
+        return resultados
+
 #home para desplegar nombres de los sujetos evaluados
-@app.route("/")
+@app.route("/", methods=["POST","GET"])
 def home_www():
     return render_template("index.html", titulo=titulo, sujetos=Pagina.todosSujetos(), evRecientes=Pagina.evaluacionesRecientes())
 
@@ -68,5 +81,12 @@ def evaluacion_www(codigo):
         if x == codigo:
             pagina=PaginaEvaluaciones(sujetos[x[0:x.find("-")]],evaluaciones[x])
             return render_template("evaluacion.html", titulo=titulo, datosSujeto=pagina.sujeto, datosEvaluacion=pagina.evaluacion, pruebas=pagina.pruebasAdmin())
+
+@app.route("/resultados", methods=["POST","GET"])
+def resultados_www():
+    termino = request.form["busquedaNav"]
+    pagina = PaginaResultados(termino,sujetos,informes,evaluaciones)
+    resultados = pagina.filtroPruebas()
+    return render_template("resultados.html", titulo=titulo, resultados= resultados)
 
 app.run(host="localhost", port=8080, debug=True)

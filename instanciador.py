@@ -25,6 +25,7 @@ class Evaluacion():
         self.dni = dni
         self.codigo = dni+"-"+self.fechaEv.strftime("%y")+"-"+self.fechaEv.strftime("%m")+"-"+self.fechaEv.strftime("%d")
         self.datosPersonales=datosPersonales
+        self.nombreCompleto = self.datosPersonales["apellido"]+", "+self.datosPersonales["nombre"]
         self.pruebas = pruebas
         self.pruebasAdministradas = []
         for x in self.pruebas:
