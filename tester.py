@@ -1,3 +1,8 @@
-lista = [("d","waka"),("a","kaka")]
+import string
 
-print(sorted(lista))
+abc = {}
+
+for x in string.ascii_uppercase:
+    abc[x]=""
+
+print(abc)

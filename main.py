@@ -4,6 +4,7 @@ from instanciador import evaluaciones
 from instanciador import informes
 from datetime import datetime, date
 from terminos import terminos
+import string
 
 app = Flask(__name__)
 titulo = "Evaluaciones"
@@ -11,10 +12,16 @@ titulo = "Evaluaciones"
 class Pagina():
     def todosSujetos():
         listaSujetos = []
+        sujetos_alfabeto = {}
+        for x in string.ascii_uppercase:
+            sujetos_alfabeto[x]=[]
         for x in sujetos:
              referencia= (sujetos[x].apellido+", "+sujetos[x].nombre,sujetos[x].DNI)
-             listaSujetos.append(referencia)
-        return sorted(listaSujetos)
+             for y in sujetos_alfabeto:
+                if referencia[0].startswith(y):
+                     sujetos_alfabeto[y].append(referencia)
+                sujetos_alfabeto[y].sort()
+        return sujetos_alfabeto
     def evaluacionesRecientes():
         evaluacionesRecientes = []
         for x in evaluaciones:
@@ -90,6 +97,7 @@ class PaginaResultados(Pagina):
                 resultadosI.append(self.informes[x])
         return resultadosI
 
+
 #home para desplegar nombres de los sujetos evaluados
 @app.route("/", methods=["POST","GET"])
 def home_www():
@@ -117,5 +125,9 @@ def resultados_www():
     filtroSujetos = pagina.filtroSujetos()
     filtroInformes = pagina.filtroInformes()
     return render_template("resultados.html", titulo=titulo, pruebas= filtroPruebas, sujetos = filtroSujetos, antecedentes=filtroInformes)
+
+@app.route("/todos")
+def todos_www():
+    return render_template("todos.html", titulo=titulo, sujetos=Pagina.todosSujetos()) 
 
 app.run(host="localhost", port=8080, debug=True)

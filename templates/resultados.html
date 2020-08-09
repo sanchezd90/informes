@@ -4,42 +4,41 @@
     <div class="mt-3">
 <h3>Resultados de la búsqueda</h3>
     </div>
+{% if pruebas != []%}
     <div class="mt-3">
-{% if pruebas == []%}
-    <h4>No se encontraron evaluaciones con esa prueba</h3>
-{% else %}
     <h4>Las siguientes evaluaciones contienen esa prueba</h3>
     <ul>
     {% for x in pruebas %}
         <li><a href="/evaluaciones/{{x.codigo}}">{{x.nombreCompleto}} ({{x.fechaEv.strftime("%x")}})</a></li>
     {% endfor %}
     </ul>
+    </div>
 {% endif %}
-    </div>
+{% if sujetos != []%}
     <div class="mt-3">
-        {% if sujetos == []%}
-            <h4>No se encontraron sujetos con ese nombre</h3>
-        {% else %}
-            <h4>Los siguientes sujetos coinciden con ese nombre</h3>
-            <ul>
-            {% for x in sujetos %}
-                <li><a href="/evaluaciones/{{x.codigo}}">{{x.nombreCompleto}} ({{x.fechaEv.strftime("%x")}})</li>
-            {% endfor %}
-            </ul>
-        {% endif %}
+        <h4>Los siguientes sujetos coinciden con ese nombre</h3>
+        <ul>
+        {% for x in sujetos %}
+            <li><a href="/evaluaciones/{{x.codigo}}">{{x.nombreCompleto}} ({{x.fechaEv.strftime("%x")}})</li>
+        {% endfor %}
+        </ul>
     </div>
-    <div class="mt-3">
-        {% if antecedentes == []%}
-            <h4>No se encontraron antecedentes con ese término</h3>
-        {% else %}
-            <h4>En los siguientes informes figura ese término</h3>
-            <ul>
-            {% for x in antecedentes %}
-                <li><a href="/evaluaciones/{{x.codigo}}">{{x.nombre}} ({{x.fechaEv.strftime("%x")}})</li>
-            {% endfor %}
-            </ul>
-        {% endif %}
-    </div>
+{% endif %}
+{% if antecedentes != []%}
+<div class="mt-3"></div>
+    <h4>En los siguientes informes figura ese término</h3>
+    <ul>
+    {% for x in antecedentes %}
+        <li><a href="/evaluaciones/{{x.codigo}}">{{x.nombre}} ({{x.fechaEv.strftime("%x")}})</li>
+    {% endfor %}
+    </ul>
+</div>
+{% endif %}
+{% if pruebas == [] and sujetos == [] and antecedentes == [] %}
+<div>
+    <h4>No hay resultados para esta búsqueda</h4>
+</div>
+{% endif %}
     <div class="container mt-4"><a class="btn btn-primary" href="/" role="button">Volver a inicio</a></div>
 </div>
 {% endblock content%}

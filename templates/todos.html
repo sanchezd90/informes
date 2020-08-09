@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content%}
+<div class="container">
+    {% for x in sujetos %}
+        {% if sujetos[x] != [] %}
+            <div class="mt-3">
+                <h3>{{x}}</h3>
+                {% for y in sujetos[x]%}
+                    <p><a href="/sujetos/{{y[1]}}">{{y[0]}}</a></p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>
+<div class="container mt-4"><a class="btn btn-primary" href="/" role="button">Volver a inicio</a></div>
+{% endblock content%}
