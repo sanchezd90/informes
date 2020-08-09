@@ -12,6 +12,12 @@
         <h5 ><strong>Fecha de evaluación:</strong> {{datosEvaluacion.fechaEv.strftime("%x")}}</h5>
     </div>
     <div class="container mt-4"><a class="btn btn-primary" href="/sujetos/{{datosSujeto.DNI}}" role="button">Ver evaluaciones del sujeto</a></div>
+    {% if antecedentes != "" %}
+    <div class="container mt-3">
+      <h4>Antecedentes</h4>
+      <p>{{ antecedentes }}</p>
+    </div>
+    {% endif %}
     <div class="accordion container mt-5" id="accordionExample">
         <h4>Pruebas administradas</h4>
         {% for x in pruebas%}

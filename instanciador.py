@@ -45,6 +45,7 @@ class Informe():
         self.nombre = nombre
         self.dni = dni
         self.fechaEv = fechaEv
+        self.codigo = dni+"-"+self.fechaEv.strftime("%y")+"-"+self.fechaEv.strftime("%m")+"-"+self.fechaEv.strftime("%d")
         self.antecedentes = antecedentes
         self.conclusion = conclusion
 

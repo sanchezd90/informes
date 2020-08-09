@@ -25,6 +25,10 @@ def getText(filename):
             fechaEv = x.lstrip("Fecha de Evaluación: ")
         if "Antecedentes" in x:
             antecedentes= fullText[i+1]
+        if "realizó sus estudios" in x:
+            antecedentes += "\n"+x
+        if "antecedentes médicos" in x:
+            antecedentes += "\n"+x
         if "En la presente evaluación" in x:
             inicioConclusion = i
         if "En el caso de existir" in x:
