@@ -26,7 +26,7 @@ class Pagina():
         evaluacionesRecientes = []
         for x in evaluaciones:
             nombreCompleto= evaluaciones[x].datosPersonales["apellido"]+", "+evaluaciones[x].datosPersonales["nombre"]
-            fecha = evaluaciones[x].fechaEv.strftime("%x")
+            fecha = f"""({evaluaciones[x].fechaEv.day}/{evaluaciones[x].fechaEv.month}/{evaluaciones[x].fechaEv.year})"""
             evaluacionesRecientes.append((fecha,nombreCompleto,x))
         return sorted(evaluacionesRecientes,reverse=True)
 

@@ -6,7 +6,7 @@ diccionarioEvaluaciones = lectorEvaluaciones.diccionarioEvaluaciones
 diccionarioInformes = lectorInformes.diccionarioInformes
 
 class Sujeto(object):
-    def __init__(self,dni,nombre,apellido,edad,fechaNac,sexo,escolaridad,pmanual,obrasocial,consentimiento):
+    def __init__(self,dni,nombre,apellido,edad,fechaNac,sexo,escolaridad,pmanual,obrasocial):
         self.DNI=dni
         self.nombre=nombre
         self.apellido=apellido
@@ -66,8 +66,7 @@ for x in diccionarioEvaluaciones:
         escolaridad=diccionarioEvaluaciones[x]['DatosPersonales']["años_esc"]
         pmanual=diccionarioEvaluaciones[x]['DatosPersonales']["pref_manual"]
         obrasocial=diccionarioEvaluaciones[x]['DatosPersonales']["obra_social"]
-        consentimiento=diccionarioEvaluaciones[x]['DatosPersonales']["consent"]
-        sujetos[x[0:x.find("-")]]=Sujeto(dni,nombre,apellido,edad,fechaNac,sexo,escolaridad,pmanual,obrasocial,consentimiento)
+        sujetos[x[0:x.find("-")]]=Sujeto(dni,nombre,apellido,edad,fechaNac,sexo,escolaridad,pmanual,obrasocial)
     else:
         for k,v in sujetos.items():
             if diccionarioEvaluaciones[x]['DatosPersonales']["DNI"] != v.DNI:
@@ -85,8 +84,7 @@ for x in diccionarioEvaluaciones:
                 escolaridad=diccionarioEvaluaciones[x]['DatosPersonales']["años_esc"]
                 pmanual=diccionarioEvaluaciones[x]['DatosPersonales']["pref_manual"]
                 obrasocial=diccionarioEvaluaciones[x]['DatosPersonales']["obra_social"]
-                consentimiento=diccionarioEvaluaciones[x]['DatosPersonales']["consent"]
-                sujetos[x[0:x.find("-")]]=Sujeto(dni,nombre,apellido,edad,fechaNac,sexo,escolaridad,pmanual,obrasocial,consentimiento)
+                sujetos[x[0:x.find("-")]]=Sujeto(dni,nombre,apellido,edad,fechaNac,sexo,escolaridad,pmanual,obrasocial)
                 break
 
 evaluaciones = {}
