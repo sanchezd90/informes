@@ -11,7 +11,7 @@ class Sujeto(object):
         self.nombre=nombre
         self.apellido=apellido
         edad = edad.split(",")
-        self.edad = edad[0]
+        self.edad = int(edad[0])
         self.fechaNac= fechaNac
         self.sexo=sexo
         self.escolaridad=escolaridad
@@ -120,3 +120,8 @@ for x in sujetos:
     for z in evaluaciones:
         if sujetos[x].DNI == evaluaciones[z].dni:
             sujetos[x].evaluaciones.update({z:evaluaciones[z]})
+
+"""
+for k,v in sujetos.items():
+    print(type(v.edad))
+"""

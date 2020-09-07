@@ -22,6 +22,11 @@ class Pagina():
                      sujetos_alfabeto[y].append(referencia)
                 sujetos_alfabeto[y].sort()
         return sujetos_alfabeto
+    def get_sujetos():
+        lista_sujetos=[]
+        for k,v in sujetos.items():
+            lista_sujetos.append(v)
+        return lista_sujetos
     def evaluacionesRecientes():
         evaluacionesRecientes = []
         for x in evaluaciones:
@@ -129,5 +134,9 @@ def resultados_www():
 @app.route("/todos")
 def todos_www():
     return render_template("todos.html", titulo=titulo, sujetos=Pagina.todosSujetos()) 
+
+@app.route("/edad")
+def edad_www():
+    return render_template("edad.html", titulo=titulo, sujetos=Pagina.get_sujetos()) 
 
 app.run(host="localhost", port=8080, debug=True)

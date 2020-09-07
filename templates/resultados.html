@@ -19,7 +19,7 @@
         <h4>Los siguientes sujetos coinciden con ese nombre</h3>
         <ul>
         {% for x in sujetos %}
-            <li><a href="/evaluaciones/{{x.codigo}}">{{x.nombreCompleto}} ({{x.fechaEv.strftime("%x")}})</li>
+            <li><a href="/evaluaciones/{{x.codigo}}">{{x.nombreCompleto}} ({{x.fechaEv.strftime("%x")}})</a></li>
         {% endfor %}
         </ul>
     </div>
@@ -29,7 +29,7 @@
     <h4>En los siguientes informes figura ese término</h3>
     <ul>
     {% for x in antecedentes %}
-        <li><a href="/evaluaciones/{{x.codigo}}">{{x.nombre}} ({{x.fechaEv.strftime("%x")}})</li>
+        <li><a href="/evaluaciones/{{x.codigo}}">{{x.nombre}} ({{x.fechaEv.strftime("%x")}})</a></li>
     {% endfor %}
     </ul>
 </div>
