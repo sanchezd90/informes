@@ -131,6 +131,17 @@ def resultados_www():
     filtroInformes = pagina.filtroInformes()
     return render_template("resultados.html", titulo=titulo, pruebas= filtroPruebas, sujetos = filtroSujetos, antecedentes=filtroInformes)
 
+@app.route("/avanzado", methods=["POST","GET"])
+def avanzado_www():
+    listado=[]
+    sexo_request=request.args.get('sexo')
+    for x in sujetos:
+        if sujetos[x].sexo=="1" and any([sexo_request=="0",sexo_request=="1"]):
+            listado.append(sujetos[x])
+        elif sujetos[x].sexo=="2" and any([sexo_request=="0",sexo_request=="2"]):
+            listado.append(sujetos[x])
+    return render_template("avanzado.html", sujetos=listado)
+
 @app.route("/todos")
 def todos_www():
     return render_template("todos.html", titulo=titulo, sujetos=Pagina.todosSujetos()) 
