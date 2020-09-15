@@ -1,8 +1,10 @@
-import lectorEvaluaciones
 import lectorInformes
 import datetime
+import json
 
-diccionarioEvaluaciones = lectorEvaluaciones.diccionarioEvaluaciones
+with open("evaluaciones.json","r") as f:
+    diccionarioEvaluaciones = json.load(f)
+
 diccionarioInformes = lectorInformes.diccionarioInformes
 
 class Sujeto(object):

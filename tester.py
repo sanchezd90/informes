@@ -1,8 +1,26 @@
-import string
+import json
 
-abc = {}
+"""
+with open("nuevojson.json","r") as f:
+    tmp=json.load(f)
 
-for x in string.ascii_uppercase:
-    abc[x]=""
+tmp.update({"cod3":{"nombre":"pedro"}})
 
-print(abc)
+with open("nuevojson.json","w") as f:
+    json.dump(tmp,f, indent=4)
+"""
+
+dic={
+    "1":{"a":"aa"},
+    "2":{"b":"bb"},
+    "3":{"c":"cc"}
+}
+
+print(dic)
+
+if "3" not in dic:
+    dic.update({"3":{"c":"cc"}})
+else:
+    print("Ya está")
+
+print(dic)
