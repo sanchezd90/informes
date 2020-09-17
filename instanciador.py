@@ -1,11 +1,11 @@
-import lectorInformes
 import datetime
 import json
 
 with open("evaluaciones.json","r") as f:
     diccionarioEvaluaciones = json.load(f)
 
-diccionarioInformes = lectorInformes.diccionarioInformes
+with open("informes.json","r") as f:
+    diccionarioInformes = json.load(f)
 
 class Sujeto(object):
     def __init__(self,dni,nombre,apellido,edad,fechaNac,sexo,escolaridad,pmanual,obrasocial):
@@ -110,6 +110,7 @@ for x in diccionarioInformes:
     nombre=diccionarioInformes[x]["nombre"]
     dni=diccionarioInformes[x]["dni"]
     fechaEv= diccionarioInformes[x]["fechaEv"]
+    fechaEv= datetime.datetime(int(fechaEv[0]),int(fechaEv[1]),int(fechaEv[2]))
     codigo=dni+"-"+fechaEv.strftime("%y")+"-"+fechaEv.strftime("%m")+"-"+fechaEv.strftime("%d")
     antecedentes = diccionarioInformes[x]["antecedentes"]
     conclusion = diccionarioInformes[x]["conclusion"]

@@ -22,7 +22,7 @@ for informe in datos_evaluaciones:
         if len(s)<2:
             split[i]="0"+split[i]
     fecha=split[2]+"-"+split[1]+"-"+split[0]
-    dni=informe[1][12]
+    dni=informe[1][12].replace(".","").replace(",","")
     codigo = dni+"-"+fecha
     if codigo not in diccionarioEvaluaciones:
         diccionarioEvaluaciones[codigo]={}

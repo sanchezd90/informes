@@ -1,7 +1,5 @@
 from flask import Flask, render_template, redirect, url_for, request
-from instanciador import sujetos
-from instanciador import evaluaciones
-from instanciador import informes
+from instanciador import sujetos,evaluaciones,informes
 from datetime import datetime, date
 from terminos import terminos
 import string

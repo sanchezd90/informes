@@ -1,8 +1,10 @@
 import os
 import docx
 import datetime
+import json
 
-diccionarioInformes = {}
+with open("informes.json","r") as f:
+    diccionarioInformes = json.load(f)
 
 def getText(filename):
     doc = docx.Document(filename)
@@ -20,7 +22,7 @@ def getText(filename):
         if "Nombre" in x:
             nombre = x.lstrip("Nombre: ")
         if "DNI" in x:
-            dni = x.lstrip("DNI: ")
+            dni = x.lstrip("DNI: ").replace(".","").replace(",","")
         if "Fecha de Evaluación: " in x:
             fechaEv = x.lstrip("Fecha de Evaluación: ")
         if "Antecedentes" in x:
@@ -40,11 +42,16 @@ def getText(filename):
     month=split[1]
     day=split[0]
     fechaInv = split[2][-2]+split[2][-1]+"-"+split[1]+"-"+split[0]
-    date=datetime.datetime(int(year),int(month),int(day))
+    date=(year,month,day)
     codigo = dni+"-"+fechaInv
-    diccionarioInformes[codigo]={"nombre":nombre,"dni":dni,"fechaEv":date,"antecedentes":antecedentes,"conclusion":conclusion}
+    if codigo not in diccionarioInformes:
+        diccionarioInformes[codigo]={"nombre":nombre,"dni":dni,"fechaEv":date,"antecedentes":antecedentes,"conclusion":conclusion}
 
 #loop para revisar archivos csv y agregar datos a datos_informes
 for archivo in os.listdir('.'):
     if archivo.endswith(".docx"):
         getText(archivo)
+
+with open("informes.json","w") as f:
+    json.dump(diccionarioInformes,f,indent=4)
+
