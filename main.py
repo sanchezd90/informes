@@ -1,7 +1,7 @@
 from flask import Flask, render_template, redirect, url_for, request
 from instanciador import sujetos,evaluaciones,informes
 from datetime import datetime, date
-from terminos import terminos
+from terminos import terminos,lista_pruebas
 import string
 
 app = Flask(__name__)
@@ -104,7 +104,30 @@ class PaginaResultados(Pagina):
 #home para desplegar nombres de los sujetos evaluados
 @app.route("/", methods=["POST","GET"])
 def home_www():
-    return render_template("index.html", titulo=titulo, sujetos=Pagina.todosSujetos(), evRecientes=Pagina.evaluacionesRecientes())
+    listado=[]
+    edad_min=request.args.get('age_min')
+    if edad_min == None:
+        edad_min = 16
+    edad_max=request.args.get('age_max')
+    if edad_max == None:
+        edad_max = 100
+    escolaridad_min=request.args.get('edu_min')
+    if escolaridad_min == None:
+        escolaridad_min = 0
+    escolaridad_max=request.args.get('edu_max')
+    if escolaridad_max == None:
+        escolaridad_max = 25
+    sexo_req=request.args.getlist('sexo')
+    if sexo_req == None:
+        sexo_req = []
+    pruebas_req=request.args.getlist('prueba')
+    if pruebas_req == None:
+        pruebas_req = []
+    for x in evaluaciones:
+        if (evaluaciones[x].sexo in sexo_req) and int(edad_min) < evaluaciones[x].edad < int(edad_max) and int(escolaridad_min) < evaluaciones[x].escolaridad < int(escolaridad_max) and all(elem in evaluaciones[x].pruebasAdministradas for elem in pruebas_req):
+            listado.append(evaluaciones[x])
+
+    return render_template("index.html", titulo=titulo, sujetos=Pagina.todosSujetos(), evRecientes=Pagina.evaluacionesRecientes(),resultado=listado,edad_min=edad_min, edad_max=edad_max, edu_min=escolaridad_min, edu_max=escolaridad_max, sexo=sexo_req, pruebas=lista_pruebas, preq=pruebas_req)
 
 @app.route("/sujetos/<string:dni>")
 def sujeto_www(dni):
@@ -143,9 +166,5 @@ def avanzado_www():
 @app.route("/todos")
 def todos_www():
     return render_template("todos.html", titulo=titulo, sujetos=Pagina.todosSujetos()) 
-
-@app.route("/edad")
-def edad_www():
-    return render_template("edad.html", titulo=titulo, sujetos=Pagina.get_sujetos()) 
 
 app.run(host="localhost", port=8080, debug=True)

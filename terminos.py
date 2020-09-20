@@ -25,3 +25,6 @@ terminos = {
     "eyes":"lectura mente ojos mind eyes",
     "voice":"voz lectura mente mind",
     }
+
+lista_pruebas=['WATBA_R', 'Matrices', 'Vocabulario', 'ACE/ACE-R', 'IFS', 'Relatos', 'Relatos Neuropsi', 'RAVLT', 'Córdoba', 'Token', 'Fluencia Fonológica', 'Fluencia Semántica', 'Dígitos adelante', 'Dígitos adelante Neuropsi', 'Dígitos atrás', 'DigitosWAIS', 'Ordenamiento N-L', 'Aritmética', 'Hayling Test', 'ROCF', 'TMT', 'Dígitos-Símbolo', 'Búsqueda de Simbolos', 'STROOP', 'WCST', 'HOTEL', 'TAP', 'Faux Pas', 'Caras', 'EYES', 'VOICE', 'TASIT', 'WAIS']
+

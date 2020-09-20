@@ -1,3 +1,4 @@
+{% from "macros.html" import edadmin,edadmax,edumin,edumax,check_pruebas with context %}
 {% extends "base.html" %}
 {% block content%}
 <div class="container mt-4">
@@ -30,17 +31,60 @@
     </div>
     {% endfor %}
   </div>
-  <div class="container mt-4">
-    <h4>Búsqueda avanzada</h4>
-      <form action="/avanzado" method="get">
-          <label>Sexo</label>
-          <select name="sexo">
-            <option value="0">Cualquiera</option>
-            <option value="1">Masculino</option>
-            <option value="2">Femenino</option>
-          </select>
+<div class="container mt-4">
+    <h4>Filtrar evaluaciones</h4>
+      <form action="/" method="get">
+          <div>
+          <label>Edad Min</label>
+          {{edadmin(edad_min)}}
+          <label>Edad Max</label>
+          {{edadmax(edad_max)}}
+          </div>
+          <div>
+          <label>Escolaridad Min</label>
+          {{edumin(edu_min)}}
+          <label>Escolaridad Max</label>
+          {{edumax(edu_max)}}
+          </div>
+          <div>
+            <label>Masculino</label>
+            <input type="checkbox" name="sexo" value="1">
+            <label>Femenino</label>
+            <input type="checkbox" name="sexo" value="2">
+          </div>
+          <div>
+            {% for x in pruebas%}
+            <label>{{x}}</label>
+            {{check_pruebas(x)}}
+            {% endfor %}
+          </div>
           <input type="submit" value="Buscar">
       </form>
+      <div class="container">
+        <div class="mt-3">
+        {% if resultado | length > 0 %}
+        <table>
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Edad</th>
+              <th>Escolaridad</th>
+              <th>Pruebas</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for x in resultado %}
+            <tr>
+              <td><a href="/evaluaciones/{{x.codigo}}">{{x.nombreCompleto}}</a></td>
+              <td>{{x.edad}}</td>
+              <td>{{x.escolaridad}}</td>
+              <td>{{x.pruebasAdministradas}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% endif %}
+    </div>
   </div>
 </div>
 {% endblock content%}

@@ -1,0 +1,20 @@
+{% macro edadmin(valor='16') -%}
+    <input type="number" name="age_min" min="16" max="100" value="{{ valor }}">
+{%- endmacro %}
+
+{% macro edadmax(valor='100') -%}
+<input type="number" name="age_max" min="16" max="100" value="{{ valor }}">
+{%- endmacro %}
+
+{% macro edumin(valor='0') -%}
+<input type="number" name="edu_min" min="0" max="25" value="{{ valor }}">
+{%- endmacro %}
+
+{% macro edumax(valor='25') -%}
+<input type="number" name="edu_max" min="0" max="25" value="{{ valor }}">
+{%- endmacro %}
+
+{% macro check_pruebas(valor='') -%}
+<input type="checkbox" name="prueba" value="{{ valor }}">
+{%- endmacro %}
+

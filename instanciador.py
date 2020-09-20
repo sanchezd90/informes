@@ -16,7 +16,7 @@ class Sujeto(object):
         self.edad = int(edad[0])
         self.fechaNac= fechaNac
         self.sexo=sexo
-        self.escolaridad=escolaridad
+        self.escolaridad=int(escolaridad)
         self.pmanual=pmanual
         self.informes = {}
         self.evaluaciones = {}
@@ -27,6 +27,24 @@ class Evaluacion():
         self.dni = dni
         self.codigo = dni+"-"+self.fechaEv.strftime("%y")+"-"+self.fechaEv.strftime("%m")+"-"+self.fechaEv.strftime("%d")
         self.datosPersonales=datosPersonales
+        self.sexo= self.datosPersonales["sexo"]
+        self.edad= self.datosPersonales["edad_eval"].split(",")
+        self.edad = int(self.edad[0])
+        self.escolaridad= int(self.datosPersonales["años_esc"])
+        self.dominancia=self.datosPersonales["pref_manual"]
+        self.derivador=self.datosPersonales["derivador"]
+        self.evaluador=self.datosPersonales["evaluador"]
+        self.dxs=[]
+        if self.datosPersonales["dx1"] != "":
+            self.dxs.append({"diagnóstico":self.datosPersonales["dx1"],"fecha":self.datosPersonales["dx1_fecha"],"tratamiento":self.datosPersonales["dx1_fecha_tto"]})
+        if self.datosPersonales["dx2"] != "":
+            self.dxs.append({"diagnóstico":self.datosPersonales["dx2"],"fecha":self.datosPersonales["dx2_fecha"],"tratamiento":self.datosPersonales["dx2_fecha_tto"]})
+        if self.datosPersonales["dx3"] != "":
+            self.dxs.append({"diagnóstico":self.datosPersonales["dx3"],"fecha":self.datosPersonales["dx3_fecha"],"tratamiento":self.datosPersonales["dx3_fecha_tto"]})
+        if self.datosPersonales["dx4"] != "":
+            self.dxs.append({"diagnóstico":self.datosPersonales["dx4"],"fecha":self.datosPersonales["dx4_fecha"],"tratamiento":self.datosPersonales["dx4_fecha_tto"]})
+        if self.datosPersonales["dx5"] != "":
+            self.dxs.append({"diagnóstico":self.datosPersonales["dx5"],"fecha":self.datosPersonales["dx5_fecha"],"tratamiento":self.datosPersonales["dx5_fecha_tto"]})
         self.nombreCompleto = self.datosPersonales["apellido"]+", "+self.datosPersonales["nombre"]
         self.pruebas = pruebas
         self.pruebasAdministradas = []
@@ -123,3 +141,5 @@ for x in sujetos:
     for z in evaluaciones:
         if sujetos[x].DNI == evaluaciones[z].dni:
             sujetos[x].evaluaciones.update({z:evaluaciones[z]})
+
+        
