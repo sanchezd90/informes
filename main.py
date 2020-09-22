@@ -3,6 +3,8 @@ from instanciador import sujetos,evaluaciones,informes
 from datetime import datetime, date
 from terminos import terminos,lista_pruebas
 import string
+import json
+from modulos import serializador
 
 app = Flask(__name__)
 titulo = "Evaluaciones"
@@ -126,7 +128,11 @@ def home_www():
     for x in evaluaciones:
         if (evaluaciones[x].sexo in sexo_req) and int(edad_min) < evaluaciones[x].edad < int(edad_max) and int(escolaridad_min) < evaluaciones[x].escolaridad < int(escolaridad_max) and all(elem in evaluaciones[x].pruebasAdministradas for elem in pruebas_req):
             listado.append(evaluaciones[x])
-
+    sz=serializador()
+    series=sz.extraer(listado)
+    archivo=f"""{sz.nombrar()}.json"""
+    with open(archivo,"w") as f:
+        json.dump(series,f,indent=4)
     return render_template("index.html", titulo=titulo, sujetos=Pagina.todosSujetos(), evRecientes=Pagina.evaluacionesRecientes(),resultado=listado,edad_min=edad_min, edad_max=edad_max, edu_min=escolaridad_min, edu_max=escolaridad_max, sexo=sexo_req, pruebas=lista_pruebas, preq=pruebas_req)
 
 @app.route("/sujetos/<string:dni>")
@@ -151,17 +157,6 @@ def resultados_www():
     filtroSujetos = pagina.filtroSujetos()
     filtroInformes = pagina.filtroInformes()
     return render_template("resultados.html", titulo=titulo, pruebas= filtroPruebas, sujetos = filtroSujetos, antecedentes=filtroInformes)
-
-@app.route("/avanzado", methods=["POST","GET"])
-def avanzado_www():
-    listado=[]
-    sexo_request=request.args.get('sexo')
-    for x in sujetos:
-        if sujetos[x].sexo=="1" and any([sexo_request=="0",sexo_request=="1"]):
-            listado.append(sujetos[x])
-        elif sujetos[x].sexo=="2" and any([sexo_request=="0",sexo_request=="2"]):
-            listado.append(sujetos[x])
-    return render_template("avanzado.html", sujetos=listado)
 
 @app.route("/todos")
 def todos_www():
