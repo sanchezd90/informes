@@ -5,7 +5,7 @@ terminos = {
     "vocabulario":"vocabulario vocab",
     "ace/ace-r":"ace addenbroke addenbroke's ace-iii",
     "ifs":"ineco frontal screening",
-    "relatos":"wms lógica weschler",
+    "relatos":"wms lógica wechsler",
     "relatos neuropsi":"neuropsi",
     "córdoba":"cordoba denominacion denominación",
     "fluencia fonológica":"fluencia fonologica fonológica fluencias",

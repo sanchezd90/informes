@@ -1,10 +1,11 @@
-from flask import Flask, render_template, redirect, url_for, request
+from flask import Flask, render_template, redirect, url_for, request, Response
 from instanciador import sujetos,evaluaciones,informes
 from datetime import datetime, date
 from terminos import terminos,lista_pruebas
 import string
 import json
 from modulos import serializador
+import csv
 
 app = Flask(__name__)
 titulo = "Evaluaciones"
@@ -130,9 +131,21 @@ def home_www():
             listado.append(evaluaciones[x])
     sz=serializador()
     series=sz.extraer(listado)
-    archivo=f"""{sz.nombrar()}.json"""
-    with open(archivo,"w") as f:
-        json.dump(series,f,indent=4)
+    #para consolidar como json
+    #archivo=f"""{sz.nombrar()}.json
+    #with open(archivo,"w") as f:
+        #json.dump(series,f,indent=4)"""
+    #para consolidad como csv
+    headers=[]
+    for x in series:
+        for k in x:
+            if k not in headers:
+                headers.append(k)
+    with open("datos.csv","w") as f:
+        out=csv.DictWriter(f,headers)
+        out.writeheader()
+        for x in series:
+            out.writerow(x)
     return render_template("index.html", titulo=titulo, sujetos=Pagina.todosSujetos(), evRecientes=Pagina.evaluacionesRecientes(),resultado=listado,edad_min=edad_min, edad_max=edad_max, edu_min=escolaridad_min, edu_max=escolaridad_max, sexo=sexo_req, pruebas=lista_pruebas, preq=pruebas_req)
 
 @app.route("/sujetos/<string:dni>")
@@ -161,5 +174,14 @@ def resultados_www():
 @app.route("/todos")
 def todos_www():
     return render_template("todos.html", titulo=titulo, sujetos=Pagina.todosSujetos()) 
+
+@app.route("/descargar")
+def getPlotCSV():
+    with open("datos.csv") as fp:
+         csv = fp.read()
+    return Response(
+        csv,
+        headers={"Content-disposition":
+                 "attachment; filename=datos.csv"})
 
 app.run(host="localhost", port=8080, debug=True)

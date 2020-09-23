@@ -54,11 +54,6 @@ class Evaluacion():
                 suma += len(self.pruebas[x][y])
             if suma > 0:
                 self.pruebasAdministradas.append(x)
-    def fueAdministrada(self,pedido):
-        if pedido in self.pruebasAdministradas:
-            return True
-        else:
-            return False
 
 class Informe():
     def __init__(self,nombre,dni,fechaEv,antecedentes,conclusion):

@@ -25,8 +25,3 @@ class Redaccion():
                 self.texto = self.texto.replace("@","o")
         return self.texto
 
-redaccion1=Redaccion()
-print(redaccion1.encadenar(["a","b","c"]))
-print(redaccion1.set_genero("El paciente viene. Dice que se siente cómod@. Luego el Sr. Ariel come. La camisa del paciente. Se le pregunta al paciente el nombre del Sr. Emi","femenino"))
-
-
