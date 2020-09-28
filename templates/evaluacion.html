@@ -1,3 +1,4 @@
+{% from "macros.html" import chart_puntajesZ with context %}
 {% extends "base.html" %}
 {% block content%}
 <section>
@@ -18,6 +19,24 @@
       <p>{{ antecedentes }}</p>
     </div>
     {% endif %}
+    <div class="container">
+    <form action="/evaluaciones/{{codigo}}" method="get">
+      <label>Graficar datos por dominio</label>
+      <select name="chart_dominio" onchange="this.form.submit()">
+        <option value="memoria">Seleccionar</option>
+        <option value="atencion">Atención</option>
+        <option value="funciones ejecutivas">Funciones Ejecutivas</option>
+        <option value="memoria">Memoria</option>
+        <option value="lenguaje">Lenguaje</option>
+        <option value="funciones visuoperceptivas">Funciones Visuoperceptivas</option>
+        <option value="cognicion social">Cognición Social</option>
+        <option value="todos">Todos</option>
+      </select>
+    </form>
+    </div>
+    <div style="width:80%; margin:0 10%;">
+      {{chart_puntajesZ(titulo_chart,labels,valores,colores)}}
+    </div>
     <div class="accordion container mt-5" id="accordionExample">
         <h4>Pruebas administradas</h4>
         {% for x in pruebas%}

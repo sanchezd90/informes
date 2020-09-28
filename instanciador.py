@@ -7,6 +7,29 @@ with open("evaluaciones.json","r") as f:
 with open("informes.json","r") as f:
     diccionarioInformes = json.load(f)
 
+def convertir_PEaZ(pe):
+    if pe == "":
+        z=""
+    else:
+        z=(int(pe)-10)/3
+    return z
+
+def convertir_PEstaZ(PEst):
+    if PEst == "":
+        z=""
+    else:
+        z=(int(PEst)-100)/15
+    return z
+
+def volver_diccionario_z(diccionario):
+    diccionario_z={}
+    for k,v in diccionario.items():
+        if v != "":
+            if type(v)==str:
+                v = float(v.replace(",","."))
+            diccionario_z.update({k:v}) 
+    return diccionario_z
+
 class Sujeto(object):
     def __init__(self,dni,nombre,apellido,edad,fechaNac,sexo,escolaridad,pmanual,obrasocial):
         self.DNI=dni
@@ -54,6 +77,58 @@ class Evaluacion():
                 suma += len(self.pruebas[x][y])
             if suma > 0:
                 self.pruebasAdministradas.append(x)
+    def obtener_memoria_z(self):
+        self.memoria_z={}
+        memoria_pruebas=["Relatos","RAVLT","ROCF"]
+        memoria_puntajes_estandarizados=["Z_SUMA_TRIALS","Aprendizaje total corregido_Z","Tasa de aprendizaje_Z","Z_ADQ","Z_TRIALB","Interferencia proactiva_Z","Interferencia retroactiva_Z","Z_DIFERIDO","Eficiencia de evocación_Z","Z_DIF","Retención_Z","ROCF_dif_z","Z_RECONOCIMIENTO","ROCF_rec_z"]
+        for x in memoria_pruebas:
+            for y in memoria_puntajes_estandarizados:
+                if x in self.pruebasAdministradas and y in self.pruebas[x] and self.pruebas[x][y] != "":
+                    self.memoria_z[y]=float(self.pruebas[x][y].replace(",","."))
+        return self.memoria_z
+    def obtener_atencion_z(self):
+        self.atencion={
+            "Trial 1 RAVLT":self.pruebas["RAVLT"]["Z_TRIAL 1"],
+            "Span Directo":self.pruebas["Dígitos adelante"]["spanDirecto_z"],
+            "TMT A":self.pruebas["TMT"]["TMT_A_z"],
+            "TMT B":self.pruebas["TMT"]["TMT_B_z"],
+            "Dígitos-Símbolo":convertir_PEaZ(self.pruebas["Dígitos-Símbolo"]["DigSim_PE"]),
+            "Búsqueda de Símbolos":convertir_PEaZ(self.pruebas["Búsqueda de Simbolos"]["BusSim_PE"]),
+            "Stroop":self.pruebas["STROOP"]["stroop_inter_z"],
+        }          
+        return volver_diccionario_z(self.atencion)
+    def obtener_ffee_z(self):
+        self.ffee={
+            "IFS":self.pruebas["IFS"]["IFS_z"],
+            "Span Inverso":self.pruebas["Dígitos atrás"]["spanInverso_z"],
+            "Ord. N-L":convertir_PEaZ(self.pruebas["Ordenamiento N-L"]["ONL_PE"]), 
+            "Aritmética":convertir_PEaZ(self.pruebas["Aritmética"]["Ar_PE"]),
+            "Hayling Test":self.pruebas["Hayling Test"]["hay_anor_z"],
+            "WCST":self.pruebas["WCST"]["WCST_cat_z"],
+            "Hotel":self.pruebas["HOTEL"]["hotel_z_desvio"],
+        }
+        return volver_diccionario_z(self.ffee)
+
+    def obtener_lenguaje_z(self):
+        self.lenguaje={
+            "Córdoba":self.pruebas["Córdoba"]["Z"],
+            "Vocabulario":convertir_PEaZ(self.pruebas["Vocabulario"]["Escalar"]),
+            "WATBA":convertir_PEstaZ(self.pruebas["WATBA_R"]["CI estimativo"]) 
+        }
+        return volver_diccionario_z(self.lenguaje)
+
+    def obtener_ffve_z(self):
+        self.ffve={
+            "Copia ROCF":self.pruebas["ROCF"]["ROCF_copia_z"]
+        }
+        return volver_diccionario_z(self.ffve)   
+
+    def obtener_cogsoc_z(self):
+        self.cogsoc={
+            "Emociones Faciales":self.pruebas["Caras"]["REF_z"],
+            "Mind in Eyes":self.pruebas["EYES"]["RME_z"],
+        }
+        return volver_diccionario_z(self.cogsoc)   
 
 class Informe():
     def __init__(self,nombre,dni,fechaEv,antecedentes,conclusion):
@@ -137,4 +212,6 @@ for x in sujetos:
         if sujetos[x].DNI == evaluaciones[z].dni:
             sujetos[x].evaluaciones.update({z:evaluaciones[z]})
 
-        
+#pruebas aca abajo
+"""for x in evaluaciones:
+    print(evaluaciones[x].obtener_ffee_z())"""

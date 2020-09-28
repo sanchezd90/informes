@@ -18,3 +18,33 @@
 <input type="checkbox" name="prueba" value="{{ valor }}">
 {%- endmacro %}
 
+{% macro chart_puntajesZ(titulo_chart='',labels='',valores='',colores='') -%}
+<canvas id="myChart"></canvas>
+<script>
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var chart = new Chart(ctx, {            
+        type: "line",            
+        data: {
+            labels: [
+            {% for item in labels %}
+                "{{ item }}",
+            {% endfor %}                    
+            ],
+            datasets: [{
+                fill: false,
+                label: "{{ titulo_chart }}",
+                backgroundColor: "green",
+                borderColor: 'green',
+                data: [
+                {% for item in valores %}
+                    "{{ item }}",
+                {% endfor %}                        
+
+                ]
+            }]
+        },            
+        options: {}
+    });
+
+</script>
+{%- endmacro %}
