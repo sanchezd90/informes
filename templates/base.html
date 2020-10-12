@@ -28,6 +28,19 @@
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
                 </form>
             </div>
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  {{usuario}}
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="#">Perfil</a>
+                  <a class="dropdown-item" href="#">Mi lista</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="/logout">Cerrar sesión</a>
+                </div>
+              </li>
+            </ul>
         </nav>
         {% block content%}
         {% endblock content%}
