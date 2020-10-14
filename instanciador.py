@@ -1,5 +1,10 @@
 import datetime
 import json
+import lector
+
+lector=lector.Lector()
+lector.leer_evaluaciones()
+lector.leer_informes()
 
 with open("evaluaciones.json","r") as f:
     diccionarioEvaluaciones = json.load(f)
@@ -213,5 +218,6 @@ for x in sujetos:
             sujetos[x].evaluaciones.update({z:evaluaciones[z]})
 
 #pruebas aca abajo
-"""for x in evaluaciones:
-    print(evaluaciones[x].obtener_ffee_z())"""
+"""
+for x in sujetos:
+    print(x)"""
