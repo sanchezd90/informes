@@ -2,39 +2,6 @@ import datetime
 import json
 import lector
 
-lector=lector.Lector()
-lector.leer_evaluaciones()
-lector.leer_informes()
-
-with open("evaluaciones.json","r") as f:
-    diccionarioEvaluaciones = json.load(f)
-
-with open("informes.json","r") as f:
-    diccionarioInformes = json.load(f)
-
-def convertir_PEaZ(pe):
-    if pe == "":
-        z=""
-    else:
-        z=(int(pe)-10)/3
-    return z
-
-def convertir_PEstaZ(PEst):
-    if PEst == "":
-        z=""
-    else:
-        z=(int(PEst)-100)/15
-    return z
-
-def volver_diccionario_z(diccionario):
-    diccionario_z={}
-    for k,v in diccionario.items():
-        if v != "":
-            if type(v)==str:
-                v = float(v.replace(",","."))
-            diccionario_z.update({k:v}) 
-    return diccionario_z
-
 class Sujeto():
     def __init__(self,dni,nombre,apellido,edad,fechaNac,sexo,escolaridad,pmanual,obrasocial):
         self.DNI=dni
@@ -82,6 +49,28 @@ class Evaluacion():
                 suma += len(self.pruebas[x][y])
             if suma > 0:
                 self.pruebasAdministradas.append(x)
+    def convertir_PEaZ(self,pe):
+    if pe == "":
+        z=""
+    else:
+        z=(int(pe)-10)/3
+    return z
+
+    def convertir_PEstaZ(self,PEst):
+        if PEst == "":
+            z=""
+        else:
+            z=(int(PEst)-100)/15
+        return z
+
+    def volver_diccionario_z(self,diccionario):
+        diccionario_z={}
+        for k,v in diccionario.items():
+            if v != "":
+                if type(v)==str:
+                    v = float(v.replace(",","."))
+                diccionario_z.update({k:v}) 
+        return diccionario_z
     def obtener_memoria_z(self):
         self.memoria_z={}
         memoria_pruebas=["Relatos","RAVLT","ROCF"]
@@ -97,43 +86,43 @@ class Evaluacion():
             "Span Directo":self.pruebas["Dígitos adelante"]["spanDirecto_z"],
             "TMT A":self.pruebas["TMT"]["TMT_A_z"],
             "TMT B":self.pruebas["TMT"]["TMT_B_z"],
-            "Dígitos-Símbolo":convertir_PEaZ(self.pruebas["Dígitos-Símbolo"]["DigSim_PE"]),
-            "Búsqueda de Símbolos":convertir_PEaZ(self.pruebas["Búsqueda de Simbolos"]["BusSim_PE"]),
+            "Dígitos-Símbolo":self.convertir_PEaZ(self.pruebas["Dígitos-Símbolo"]["DigSim_PE"]),
+            "Búsqueda de Símbolos":self.convertir_PEaZ(self.pruebas["Búsqueda de Simbolos"]["BusSim_PE"]),
             "Stroop":self.pruebas["STROOP"]["stroop_inter_z"],
         }          
-        return volver_diccionario_z(self.atencion)
+        return self.volver_diccionario_z(self.atencion)
     def obtener_ffee_z(self):
         self.ffee={
             "IFS":self.pruebas["IFS"]["IFS_z"],
             "Span Inverso":self.pruebas["Dígitos atrás"]["spanInverso_z"],
-            "Ord. N-L":convertir_PEaZ(self.pruebas["Ordenamiento N-L"]["ONL_PE"]), 
-            "Aritmética":convertir_PEaZ(self.pruebas["Aritmética"]["Ar_PE"]),
+            "Ord. N-L":self.convertir_PEaZ(self.pruebas["Ordenamiento N-L"]["ONL_PE"]), 
+            "Aritmética":self.convertir_PEaZ(self.pruebas["Aritmética"]["Ar_PE"]),
             "Hayling Test":self.pruebas["Hayling Test"]["hay_anor_z"],
             "WCST":self.pruebas["WCST"]["WCST_cat_z"],
             "Hotel":self.pruebas["HOTEL"]["hotel_z_desvio"],
         }
-        return volver_diccionario_z(self.ffee)
+        return self.volver_diccionario_z(self.ffee)
 
     def obtener_lenguaje_z(self):
         self.lenguaje={
             "Córdoba":self.pruebas["Córdoba"]["Z"],
-            "Vocabulario":convertir_PEaZ(self.pruebas["Vocabulario"]["Escalar"]),
-            "WATBA":convertir_PEstaZ(self.pruebas["WATBA_R"]["CI estimativo"]) 
+            "Vocabulario":self.convertir_PEaZ(self.pruebas["Vocabulario"]["Escalar"]),
+            "WATBA":self.convertir_PEstaZ(self.pruebas["WATBA_R"]["CI estimativo"]) 
         }
-        return volver_diccionario_z(self.lenguaje)
+        return self.volver_diccionario_z(self.lenguaje)
 
     def obtener_ffve_z(self):
         self.ffve={
             "Copia ROCF":self.pruebas["ROCF"]["ROCF_copia_z"]
         }
-        return volver_diccionario_z(self.ffve)   
+        return self.volver_diccionario_z(self.ffve)   
 
     def obtener_cogsoc_z(self):
         self.cogsoc={
             "Emociones Faciales":self.pruebas["Caras"]["REF_z"],
             "Mind in Eyes":self.pruebas["EYES"]["RME_z"],
         }
-        return volver_diccionario_z(self.cogsoc)   
+        return self.volver_diccionario_z(self.cogsoc)   
 
 class Informe():
     def __init__(self,nombre,dni,fechaEv,antecedentes,conclusion):
@@ -145,12 +134,16 @@ class Informe():
         self.conclusion = conclusion
 
 class Compilador():
-    def __init__(self,diccionarioEvaluaciones,diccionarioInformes):
+    def __init__(self):
         self.sujetos={}
         self.evaluaciones={}
         self.informes={}
-        self.diccionarioEvaluaciones=diccionarioEvaluaciones
-        self.diccionarioInformes=diccionarioInformes
+        self.diccionarioEvaluaciones=None
+        with open("evaluaciones.json","r") as f:
+            self.diccionarioEvaluaciones = json.load(f)
+        self.diccionarioInformes=None
+        with open("informes.json","r") as f:
+            self.diccionarioInformes = json.load(f)
     def compilar_sujetos(self):
         for x in self.diccionarioEvaluaciones:
             if len(self.sujetos) == 0:
@@ -224,14 +217,10 @@ class Compilador():
             for z in self.evaluaciones:
                 if self.sujetos[x].DNI == self.evaluaciones[z].dni:
                     self.sujetos[x].evaluaciones.update({z:self.evaluaciones[z]})
-        return self.sujetos
+        return {"sujetos":self.sujetos,"evaluaciones":self.evaluaciones,"informes":self.informes}
 
 
-compilador=Compilador(diccionarioEvaluaciones,diccionarioInformes)
-subjects=compilador.activar()
-for x in subjects:
-    print(subjects[x].informes)
-    print(subjects[x].evaluaciones)
+
 
 
 

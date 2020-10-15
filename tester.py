@@ -1,29 +1,21 @@
+from datetime import datetime
+from flask import Flask
 
-info=["ao","ab","bc","bd"]
+app = Flask(__name__)
 
-class Cadena():
-    def __init__(self,texto):
-        self.cadena=texto+"c"
 
-class Waka():
-    def __init__(self,info):
-        self.a=[]
-        self.b=[]
-    def crear_a(self):
-        for x in info:
-            if x.startswith("a"):
-                self.a.append(Cadena(x))
-    def crear_b(self):
-        for x in info:
-            if x.startswith("b"):
-                self.b.append(Cadena(x))
-    def activar(self):
-        self.crear_a()
-        self.crear_b()
-        return (self.a,self.b)
+class Tiempo():
+    def mostrar(self):
+        t=datetime.now()
+        return t
 
-w1=Waka(info)
-print(w1.activar())
+@app.route("/")
+def home():
+    tiempo=Tiempo()
+    t=tiempo.mostrar()
+    return f"""<h1>{t}</h1>"""
+
+app.run(host="localhost", port=8080, debug=True)
 
 
             
