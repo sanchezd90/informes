@@ -1,6 +1,4 @@
 from flask import Flask, render_template, redirect, url_for, request, Response, session
-from instanciador import sujetos,evaluaciones,informes
-from pagina import Pagina,PaginaSujeto,PaginaEvaluaciones,PaginaResultados
 from datetime import datetime, date, timedelta
 from terminos import terminos,lista_pruebas
 import string
@@ -9,6 +7,8 @@ from modulos import serializador
 import csv
 import random
 import hashlib
+from compilador import Compilador
+from paginas import Pagina,PaginaSujeto,PaginaEvaluaciones,PaginaResultados
 
 app = Flask(__name__)
 app.secret_key="WakaWaka"
@@ -38,9 +38,17 @@ def validuser(u,p):
             encontrado = True
     return encontrado
 
+compilador=Compilador()
+datos=compilador.activar()
+sujetos=datos["sujetos"]
+evaluaciones=datos["evaluaciones"]
+informes=datos["informes"]
+
 #home para desplegar nombres de los sujetos evaluados
 @app.route("/", methods=["POST","GET"])
 def home_www():
+    pagina=Pagina(datos)
+    #esta parte es para el filtro
     listado=[]
     edad_min=request.args.get('age_min')
     if edad_min == None:
@@ -86,7 +94,7 @@ def home_www():
     if "user" in session:
         user=session["user"]
         nombre_usuario=users[user]["nombre"]
-        return render_template("index.html", titulo=titulo, usuario=nombre_usuario, sujetos=Pagina.todosSujetos(), evRecientes=Pagina.evaluacionesRecientes(),resultado=listado,edad_min=edad_min, edad_max=edad_max, edu_min=escolaridad_min, edu_max=escolaridad_max, sexo=sexo_req, pruebas=lista_pruebas, preq=pruebas_req)
+        return render_template("index.html", titulo=titulo, usuario=nombre_usuario, sujetos=pagina.todosSujetos(), evRecientes=pagina.evaluacionesRecientes(),resultado=listado,edad_min=edad_min, edad_max=edad_max, edu_min=escolaridad_min, edu_max=escolaridad_max, sexo=sexo_req, pruebas=lista_pruebas, preq=pruebas_req)
     else:
         return redirect(url_for("inicio"))
 
@@ -138,11 +146,10 @@ def evaluacion_www(codigo):
     else:
         return redirect(url_for("inicio"))
     
-
 @app.route("/resultados", methods=["POST","GET"])
 def resultados_www():
     termino = request.form["busquedaNav"]
-    pagina = PaginaResultados(termino,sujetos,informes,evaluaciones)
+    pagina = PaginaResultados(termino,datos)
     filtroPruebas = pagina.filtroPruebas()
     filtroSujetos = pagina.filtroSujetos()
     filtroInformes = pagina.filtroInformes()
@@ -151,11 +158,11 @@ def resultados_www():
     else:
         return redirect(url_for("inicio"))
  
-
 @app.route("/todos")
 def todos_www():
+    pagina=Pagina(datos)
     if "user" in session:
-        return render_template("todos.html", titulo=titulo, sujetos=Pagina.todosSujetos()) 
+        return render_template("todos.html", titulo=titulo, sujetos=pagina.todosSujetos()) 
     else:
         return redirect(url_for("inicio"))
     

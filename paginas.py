@@ -3,7 +3,6 @@ from terminos import terminos,lista_pruebas
 import string
 import compilador
 
-
 class Pagina():
     def __init__(self,datos):
         self.sujetos=datos["sujetos"]
@@ -165,5 +164,6 @@ class PaginaResultados(Pagina):
             if self.informes[x].antecedentes.lower().find(self.termino)>-1:
                 resultadosI.append(self.informes[x])
         return resultadosI
+
 
 

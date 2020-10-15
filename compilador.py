@@ -50,11 +50,11 @@ class Evaluacion():
             if suma > 0:
                 self.pruebasAdministradas.append(x)
     def convertir_PEaZ(self,pe):
-    if pe == "":
-        z=""
-    else:
-        z=(int(pe)-10)/3
-    return z
+        if pe == "":
+            z=""
+        else:
+            z=(int(pe)-10)/3
+        return z
 
     def convertir_PEstaZ(self,PEst):
         if PEst == "":
