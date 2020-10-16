@@ -8,7 +8,7 @@ import csv
 import random
 import hashlib
 from compilador import Compilador
-from paginas import Pagina,PaginaSujeto,PaginaEvaluaciones,PaginaResultados
+from presentador import Presentador
 
 app = Flask(__name__)
 app.secret_key="WakaWaka"
@@ -38,16 +38,14 @@ def validuser(u,p):
             encontrado = True
     return encontrado
 
-compilador=Compilador()
-datos=compilador.activar()
-sujetos=datos["sujetos"]
-evaluaciones=datos["evaluaciones"]
-informes=datos["informes"]
+presentador=Presentador()
+sujetos=presentador.sujetos
+evaluaciones=presentador.evaluaciones
+informes=presentador.informes
 
 #home para desplegar nombres de los sujetos evaluados
 @app.route("/", methods=["POST","GET"])
 def home_www():
-    pagina=Pagina(datos)
     #esta parte es para el filtro
     listado=[]
     edad_min=request.args.get('age_min')
@@ -94,7 +92,7 @@ def home_www():
     if "user" in session:
         user=session["user"]
         nombre_usuario=users[user]["nombre"]
-        return render_template("index.html", titulo=titulo, usuario=nombre_usuario, sujetos=pagina.todosSujetos(), evRecientes=pagina.evaluacionesRecientes(),resultado=listado,edad_min=edad_min, edad_max=edad_max, edu_min=escolaridad_min, edu_max=escolaridad_max, sexo=sexo_req, pruebas=lista_pruebas, preq=pruebas_req)
+        return render_template("index.html", titulo=titulo, usuario=nombre_usuario, sujetos=presentador.get_sujetos_alfab(), evRecientes=presentador.get_evaluaciones_fecha(),resultado=listado,edad_min=edad_min, edad_max=edad_max, edu_min=escolaridad_min, edu_max=escolaridad_max, sexo=sexo_req, pruebas=lista_pruebas, preq=pruebas_req)
     else:
         return redirect(url_for("inicio"))
 
@@ -102,57 +100,56 @@ def home_www():
 def sujeto_www(dni):
     for x in sujetos:
         if x == dni:
-            pagina=PaginaSujeto(sujetos[x])
+            sujeto=presentador.get_sujeto(dni)
             if "user" in session:
                 user=session["user"]
                 admin=users[user]["admin"]
-                return render_template("sujeto.html", titulo=titulo, admin=admin, datos=pagina.sujeto, abstractEvaluaciones=pagina.mostrarAbstractEvaluaciones())
+                return render_template("sujeto.html", titulo=titulo, admin=admin, datos=sujeto, abstractEvaluaciones=presentador.get_abstract_evaluaciones(sujeto))
             else:
                 return redirect(url_for("inicio"))
 
 @app.route("/evaluaciones/<string:codigo>", methods=["POST","GET"])
 def evaluacion_www(codigo):
+    evaluacion=presentador.get_evaluacion(codigo)
+    dni=evaluacion.dni
+    sujeto=presentador.get_sujeto(dni)
     if request.args.get('chart_dominio') == None:
         dominio="todos"
     else:
         dominio=request.args.get('chart_dominio')
-    for x in evaluaciones:
-        if x == codigo:
-            pagina=PaginaEvaluaciones(sujetos[x[0:x.find("-")]],evaluaciones[x])
     if dominio == "atencion":
-        labels=pagina.mostrar_atencion_z()[0]
-        valores=pagina.mostrar_atencion_z()[1]
+        labels=presentador.get_atencion_z(evaluacion)[0]
+        valores=presentador.get_atencion_z(evaluacion)[1]
     elif dominio == "funciones ejecutivas":
-        labels=pagina.mostrar_ffee_z()[0]
-        valores=pagina.mostrar_ffee_z()[1]
+        labels=presentador.get_ffee_z(evaluacion)[0]
+        valores=presentador.get_ffee_z(evaluacion)[1]
     elif dominio == "lenguaje":
-        labels=pagina.mostrar_lenguaje_z()[0]
-        valores=pagina.mostrar_lenguaje_z()[1]
+        labels=presentador.get_lenguaje_z(evaluacion)[0]
+        valores=presentador.get_lenguaje_z(evaluacion)[1]
     elif dominio == "funciones visuoperceptivas":
-        labels=pagina.mostrar_ffve_z()[0]
-        valores=pagina.mostrar_ffve_z()[1] 
+        labels=presentador.get_ffve_z(evaluacion)[0]
+        valores=presentador.get_ffve_z(evaluacion)[1] 
     elif dominio == "cognicion social":
-        labels=pagina.mostrar_cogsoc_z()[0]
-        valores=pagina.mostrar_cogsoc_z()[1] 
+        labels=presentador.get_cogsoc_z(evaluacion)[0]
+        valores=presentador.get_cogsoc_z(evaluacion)[1] 
     elif dominio == "memoria":
-        labels=pagina.mostrar_memoria_z()[0]
-        valores=pagina.mostrar_memoria_z()[1]  
+        labels=presentador.get_memoria_z(evaluacion)[0]
+        valores=presentador.get_memoria_z(evaluacion)[1]  
     else:
-        labels=pagina.mostrar_todos_z()[0]
-        valores=pagina.mostrar_todos_z()[1]
+        labels=presentador.get_todos_z(evaluacion)[0]
+        valores=presentador.get_todos_z(evaluacion)[1]
     codigo_url=codigo
     if "user" in session:
-        return render_template("evaluacion.html", titulo=titulo, datosSujeto=pagina.sujeto, datosEvaluacion=pagina.evaluacion, pruebas=pagina.pruebasAdmin(), antecedentes=pagina.mostrarAntecedentes(),labels=labels,valores=valores,codigo=codigo_url,titulo_chart=dominio)
+        return render_template("evaluacion.html", titulo=titulo, datosSujeto=sujeto, datosEvaluacion=evaluacion, pruebas=presentador.get_pruebas_admin(evaluacion), antecedentes=presentador.get_antecedentes(sujeto,evaluacion),labels=labels,valores=valores,codigo=codigo_url,titulo_chart=dominio)
     else:
         return redirect(url_for("inicio"))
     
 @app.route("/resultados", methods=["POST","GET"])
 def resultados_www():
     termino = request.form["busquedaNav"]
-    pagina = PaginaResultados(termino,datos)
-    filtroPruebas = pagina.filtroPruebas()
-    filtroSujetos = pagina.filtroSujetos()
-    filtroInformes = pagina.filtroInformes()
+    filtroPruebas = presentador.filtrar_pruebas(termino)
+    filtroSujetos = presentador.filtrar_sujetos(termino)
+    filtroInformes = presentador.filtrar_informes(termino)
     if "user" in session:
         return render_template("resultados.html", titulo=titulo, pruebas= filtroPruebas, sujetos = filtroSujetos, antecedentes=filtroInformes)
     else:
@@ -160,9 +157,8 @@ def resultados_www():
  
 @app.route("/todos")
 def todos_www():
-    pagina=Pagina(datos)
     if "user" in session:
-        return render_template("todos.html", titulo=titulo, sujetos=pagina.todosSujetos()) 
+        return render_template("todos.html", titulo=titulo, sujetos=presentador.get_sujetos_alfab()) 
     else:
         return redirect(url_for("inicio"))
     

@@ -1,6 +1,5 @@
 import datetime
 import json
-import lector
 
 class Sujeto():
     def __init__(self,dni,nombre,apellido,edad,fechaNac,sexo,escolaridad,pmanual,obrasocial):
