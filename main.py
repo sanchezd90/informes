@@ -10,6 +10,8 @@ import hashlib
 from compilador import Compilador
 from presentador import Presentador
 
+#funciona para excel v201020
+
 app = Flask(__name__)
 app.secret_key="WakaWaka"
 app.permanent_session_lifetime = timedelta(hours=1)

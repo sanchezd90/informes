@@ -1,3 +1,5 @@
+#este es para generar claves, no lo usa la app
+
 import hashlib
 
 def generar_pass(p):
