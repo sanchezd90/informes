@@ -43,6 +43,8 @@ sujetos=presentador.sujetos
 evaluaciones=presentador.evaluaciones
 informes=presentador.informes
 
+
+
 #home para desplegar nombres de los sujetos evaluados
 @app.route("/", methods=["POST","GET"])
 def home_www():

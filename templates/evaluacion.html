@@ -6,7 +6,7 @@
         <h4 >{{datosSujeto.apellido}}, {{datosSujeto.nombre}}</h4>
         <h5 ><strong>DNI:</strong> {{datosSujeto.DNI}}</h5>
         <h5 ><strong>Fecha de nacimiento:</strong> {{datosSujeto.fechaNac.strftime("%x")}}</h5>
-        <h5 ><strong>Edad al momento de la evaluación:</strong> {{datosEvaluacion.datosPersonales["edad_eval"].rstrip(",00")}}</h5>
+        <h5 ><strong>Edad al momento de la evaluación:</strong> {{datosEvaluacion.datosPersonales["edad_eval"]}}</h5>
         <h5 ><strong>Sexo:</strong> {{"Masculino" if datosSujeto.sexo == "1" else "Femenino"}}</h5>
         <h5 ><strong>Años de educación al momento de evaluar:</strong> {{datosEvaluacion.datosPersonales["años_esc"]}}</h5>
         <h5 ><strong>Preferencia Manual:</strong> {{"Derecha" if datosSujeto.pmanual == "1" else "Izquierda"}}</h5>

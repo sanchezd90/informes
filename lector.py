@@ -105,8 +105,9 @@ class Lector():
             json.dump(diccionarioEvaluaciones,f,indent=4)
 
 #para crear instancia y leer datos de ambos json
+
 """
-lector=lector.Lector()
+lector=Lector()
 lector.leer_evaluaciones()
 lector.leer_informes()
 """

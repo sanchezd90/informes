@@ -1,6 +1,8 @@
 import datetime
 import json
 
+#funcionamiento óptimo a partir de excel v201020
+
 class Sujeto():
     def __init__(self,dni,nombre,apellido,edad,fechaNac,sexo,escolaridad,pmanual,obrasocial):
         self.DNI=dni
@@ -48,6 +50,12 @@ class Evaluacion():
                 suma += len(self.pruebas[x][y])
             if suma > 0:
                 self.pruebasAdministradas.append(x)
+        if "versionExcel" in self.datosPersonales:
+            self.versionExcel=self.datosPersonales["versionExcel"]
+        else:
+            self.versionExcel=None
+
+
     def convertir_PEaZ(self,pe):
         if pe == "":
             z=""
@@ -72,8 +80,8 @@ class Evaluacion():
         return diccionario_z
     def obtener_memoria_z(self):
         self.memoria_z={}
-        memoria_pruebas=["Relatos","RAVLT","ROCF"]
-        memoria_puntajes_estandarizados=["Z_SUMA_TRIALS","Aprendizaje total corregido_Z","Tasa de aprendizaje_Z","Z_ADQ","Z_TRIALB","Interferencia proactiva_Z","Interferencia retroactiva_Z","Z_DIFERIDO","Eficiencia de evocación_Z","Z_DIF","Retención_Z","ROCF_dif_z","Z_RECONOCIMIENTO","ROCF_rec_z"]
+        memoria_pruebas=["Relatos (WMS IV)","RAVLT (Tambor50)","ROCF","RAVLT (Pasto50)","Taylor","RAVLT (Tambor60)"]
+        memoria_puntajes_estandarizados=["TRIAL 1_pje_z","SUMA_TRIALS_pje_z","TRIALB_pje_z","DIFERIDO_pje_z","RECONOCIMIENTO_pje_z","Aprendizaje total corregido_pje_Z","Tasa de aprendizaje_pje_Z","Interferencia proactiva_pje_Z","Interferencia retroactiva_pje_Z","Retención_pje_Z","Eficiencia de evocación_pje_Z","ROCF_dif_z","ROCF_rec_z","Taylor_dif_z","Taylor_rec_z"]
         for x in memoria_pruebas:
             for y in memoria_puntajes_estandarizados:
                 if x in self.pruebasAdministradas and y in self.pruebas[x] and self.pruebas[x][y] != "":
@@ -81,45 +89,58 @@ class Evaluacion():
         return self.memoria_z
     def obtener_atencion_z(self):
         self.atencion={
-            "Trial 1 RAVLT":self.pruebas["RAVLT"]["Z_TRIAL 1"],
-            "Span Directo":self.pruebas["Dígitos adelante"]["spanDirecto_z"],
-            "TMT A":self.pruebas["TMT"]["TMT_A_z"],
-            "TMT B":self.pruebas["TMT"]["TMT_B_z"],
-            "Dígitos-Símbolo":self.convertir_PEaZ(self.pruebas["Dígitos-Símbolo"]["DigSim_PE"]),
-            "Búsqueda de Símbolos":self.convertir_PEaZ(self.pruebas["Búsqueda de Simbolos"]["BusSim_PE"]),
-            "Stroop":self.pruebas["STROOP"]["stroop_inter_z"],
-        }          
+            "RAVLT T1":self.pruebas["RAVLT (Tambor50)"]["TRIAL 1_pje_z"],
+            "RAVLT T1":self.pruebas["RAVLT (Pasto50)"]["TRIAL 1_pje_z"],
+            "RAVLT T1":self.pruebas["RAVLT (Tambor60)"]["TRIAL 1_pje_z"],
+            "Span Directo W-IV":self.pruebas["Dígitos adelante (WAISIV)"]["DD_spanDirecto__pje_z"],
+            "TMT A (escrito)":self.pruebas["TMT (escrito)"]["TMT_A_escrito_pje_z"],
+            "TMT B (escrito)":self.pruebas["TMT (escrito)"]["TMT_B_escrito_pje_z"],
+            "TMT A (oral)":self.pruebas["TMT (oral)"]["TMT_A_oral_pje_z"],
+            "TMT B (oral)":self.pruebas["TMT (oral)"]["TMT_B_oral_pje_z"],
+            "Dígitos-Símbolos W-IV":self.convertir_PEaZ(self.pruebas["Dígitos-Símbolo (WAISIV)"]["DigSim_IV_pje_es"]),
+            "Búsqueda de Símbolos":self.convertir_PEaZ(self.pruebas["Búsqueda de Simbolos (WAISIV)"]["BusSim_IV_pje_es"]),
+            "Símbolos-Dígitos (SDMT)":self.pruebas["SDMT"]["SDMT_pje_z"],
+            "Stroop":self.pruebas["STROOP"]["stroop_inter_pje_z"]
+            }                  
         return self.volver_diccionario_z(self.atencion)
     def obtener_ffee_z(self):
         self.ffee={
             "IFS":self.pruebas["IFS"]["IFS_z"],
-            "Span Inverso":self.pruebas["Dígitos atrás"]["spanInverso_z"],
-            "Ord. N-L":self.convertir_PEaZ(self.pruebas["Ordenamiento N-L"]["ONL_PE"]), 
-            "Aritmética":self.convertir_PEaZ(self.pruebas["Aritmética"]["Ar_PE"]),
-            "Hayling Test":self.pruebas["Hayling Test"]["hay_anor_z"],
-            "WCST":self.pruebas["WCST"]["WCST_cat_z"],
-            "Hotel":self.pruebas["HOTEL"]["hotel_z_desvio"],
+            "Span Inverso W-IV":self.pruebas["Dígitos atrás (WAISIV)"]["DI_spanInverso_z_pje_z"],
+            "Ord. N-L W-IV":self.convertir_PEaZ(self.pruebas["Ordenamiento N-L (WAISIV)"]["ONL_IV_pje_es"]), 
+            "Aritmética W-IV":self.convertir_PEaZ(self.pruebas["Aritmética (WAISIV)"]["WAIS_IV_Ar_pje_es"]),
+            "Hayling Test":self.pruebas["Hayling Test"]["hay_anor_pje_z"],
+            "WCST (48)":self.pruebas["WCST (48)"]["WCST_cat_pje_z"],
+            "Hotel":self.pruebas["HOTEL"]["hotel_desvio_pje_z"],
         }
         return self.volver_diccionario_z(self.ffee)
 
     def obtener_lenguaje_z(self):
         self.lenguaje={
-            "Córdoba":self.pruebas["Córdoba"]["Z"],
-            "Vocabulario":self.convertir_PEaZ(self.pruebas["Vocabulario"]["Escalar"]),
-            "WATBA":self.convertir_PEstaZ(self.pruebas["WATBA_R"]["CI estimativo"]) 
+            "Córdoba":self.pruebas["Córdoba"]["COR_pje_z"],
+            "Vocabulario W-IV":self.convertir_PEaZ(self.pruebas["Vocabulario (IV)"]["VOC_IV_pje_escalar"]),
+            "WATBA-R":self.convertir_PEstaZ(self.pruebas["WATBA-R"]["WA_pje_est"]),
+            "Fluencia Fonológica": self.pruebas["Fluencia Fonológica (P)"]["FF_pje_Z"],
+            "Fluencia Semántica": self.pruebas["Fluencia Semántica (animales)"]["FS_pje_Z"],
+            "Fluencia Fonológica": self.pruebas["Fluencia Fonológica (M)"]["FF_pje_Z"],
+            "Fluencia Semántica": self.pruebas["Fluencia Semántica (casa)"]["FS_pje_Z"]
         }
         return self.volver_diccionario_z(self.lenguaje)
 
     def obtener_ffve_z(self):
         self.ffve={
-            "Copia ROCF":self.pruebas["ROCF"]["ROCF_copia_z"]
+            "Copia ROCF":self.pruebas["ROCF"]["ROCF_copia_z"],
+            "Copia Taylor":self.pruebas["Taylor"]["Taylor_copia_z"]
         }
         return self.volver_diccionario_z(self.ffve)   
 
     def obtener_cogsoc_z(self):
         self.cogsoc={
-            "Emociones Faciales":self.pruebas["Caras"]["REF_z"],
-            "Mind in Eyes":self.pruebas["EYES"]["RME_z"],
+            "Caras (MINI-SEA)":self.pruebas["Caras (Mini-SEA)"]["REF_pje_z"],
+            "Faux Pas (MINI-SEA)":self.pruebas["Faux Pas (Mini-SEA)"]["FP_pje_z"],
+            "Mind in the Eyes (36)":self.pruebas["EYES (36)"]["RME_pje_z"],
+            "Mind in the Eyes (24)":self.pruebas["EYES (24)"]["RME_pje_z"],
+            "Mind in the Voice (25)":self.pruebas["VOICE (25)"]["RMV_pje_z"],
         }
         return self.volver_diccionario_z(self.cogsoc)   
 
