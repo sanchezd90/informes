@@ -26,5 +26,23 @@ terminos = {
     "voice":"voz lectura mente mind",
     }
 
-lista_pruebas=['WATBA_R', 'Matrices', 'Vocabulario', 'ACE/ACE-R', 'IFS', 'Relatos', 'Relatos Neuropsi', 'RAVLT', 'Córdoba', 'Token', 'Fluencia Fonológica', 'Fluencia Semántica', 'Dígitos adelante', 'Dígitos adelante Neuropsi', 'Dígitos atrás', 'DigitosWAIS', 'Ordenamiento N-L', 'Aritmética', 'Hayling Test', 'ROCF', 'TMT', 'Dígitos-Símbolo', 'Búsqueda de Simbolos', 'STROOP', 'WCST', 'HOTEL', 'TAP', 'Faux Pas', 'Caras', 'EYES', 'VOICE', 'TASIT', 'WAIS']
+lista_pruebas=[
+    'WATBA-R', 'Matrices (IV)', 'Vocabulario (IV)', 'ACE-III',
+    'IFS',"Relatos (WMS IV)","RAVLT (Tambor50)","Córdoba",
+    "Fluencia Fonológica (P)","Fluencia Semántica (animales)",
+    "Dígitos adelante (WAISIV)","Dígitos adelante Neuropsi",
+    "Dígitos atrás (WAISIV)","Secuenciación (WAISIV)",
+    "DigitosWAIS (WAISIV)","Ordenamiento N-L (WAISIII)",
+    "Ordenamiento N-L (WAISIV)","Aritmética (WAISIII",
+    "Aritmética (WAISIV)","Hayling Test","ROCF","TMT (escrito)",
+    "Dígitos-Símbolo (WAISIV)","Búsqueda de Simbolos (WAISIV)",
+    "STROOP","WCST (48)","HOTEL","TAP Go No Go","TAP WM",
+    "TAP Atencion","TAP Flexibilidad","Faux Pas (Mini-SEA)",
+    "Caras (Mini-SEA)","EYES (36)","VOICE (25)","TASIT",
+    "WAIS-III","RAVLT (Pasto50)","EYES (24)","TMT (oral)",
+    "SDMT","Taylor","RAVLT (Tambor60)",
+    "ACE-R","Fluencia Fonológica (M)","Fluencia Semántica (casa)",
+    "Cubos (WAISIV)","Cubos (WAISIV)","Rompecabezas (WAISIV)",
+    "Información (WAISIV)","Balanzas (WAISIV)","Comprensión (WAISIV)",
+    "Cancelación (WAISIV)","Figuras Incompletas (WAISIV)"]
 
