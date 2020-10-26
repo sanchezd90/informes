@@ -43,7 +43,11 @@ class Lector():
             year=split[2]
             month=split[1]
             day=split[0]
-            fechaInv = split[2][-2]+split[2][-1]+"-"+split[1]+"-"+split[0]
+            if len(month)==1:
+                month="0"+month
+            if len(day)==1:
+                day="0"+day
+            fechaInv = split[2][-2]+split[2][-1]+"-"+month+"-"+day
             date=(year,month,day)
             codigo = dni+"-"+fechaInv
             if codigo not in diccionarioInformes:
@@ -80,6 +84,10 @@ class Lector():
             for i,s in enumerate(split):
                 if len(s)<2:
                     split[i]="0"+split[i]
+            if len(split[1])==1:
+                split[1]="0"+split[1]
+            if len(split[0])==1:
+                split[0]="0"+split[0]
             fecha=split[2]+"-"+split[1]+"-"+split[0]
             dni=informe[1][12].replace(".","").replace(",","")
             codigo = dni+"-"+fecha
@@ -106,8 +114,6 @@ class Lector():
 
 #para crear instancia y leer datos de ambos json
 
-"""
 lector=Lector()
 lector.leer_evaluaciones()
 lector.leer_informes()
-"""

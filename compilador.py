@@ -205,6 +205,8 @@ class Compilador():
         for x in self.diccionarioEvaluaciones:
             dni=self.diccionarioEvaluaciones[x]['DatosPersonales']["DNI"]
             splitfechaEv=self.diccionarioEvaluaciones[x]['DatosPersonales']["fecha_ev"].split("/")
+            if splitfechaEv[2] == "2020":
+                splitfechaEv[2] = "20"
             for i,s in enumerate(splitfechaEv):
                 if len(s)<2:
                     splitfechaEv[i]="0"+splitfechaEv[i]
@@ -238,7 +240,6 @@ class Compilador():
                 if self.sujetos[x].DNI == self.evaluaciones[z].dni:
                     self.sujetos[x].evaluaciones.update({z:self.evaluaciones[z]})
         return {"sujetos":self.sujetos,"evaluaciones":self.evaluaciones,"informes":self.informes}
-
 
 
 

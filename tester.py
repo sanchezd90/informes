@@ -1,10 +1,5 @@
-dicc={
-    "Agua":"h20",
-    "Dioxido de carbono":"co2"
-}
+import json
+from usuarios import users
 
-nuevo_dic={
-    "Water":dicc["wasser"] or dicc["Agua"]
-}
-
-print(nuevo_dic)
+with open("usuarios.json","w") as f:
+    json.dump(users,f,indent=4)

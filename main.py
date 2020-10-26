@@ -9,7 +9,6 @@ import random
 import hashlib
 from compilador import Compilador
 from presentador import Presentador
-from usuarios import users
 
 #funciona para excel v201020 en adelante
 
@@ -18,6 +17,8 @@ app.secret_key="WakaWaka"
 app.permanent_session_lifetime = timedelta(hours=1)
 titulo = "Evaluaciones"
 
+with open("usuarios.json","r") as f:
+    users=json.load(f)
 
 def validuser(u,p):
     encontrado = False
