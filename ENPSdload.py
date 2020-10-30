@@ -1,3 +1,5 @@
+import os
+import shutil
 from pydrive.auth import GoogleAuth
 
 gauth = GoogleAuth()
@@ -28,7 +30,11 @@ def get_drivefiles():
                         file_d = drive.CreateFile({'id': file_id})
                         file_d.GetContentFile(file_title)
                         new_dloads.append(file_title)
-    
+                        #esto es para pasarlo a la carpeta correspondiente
+                        currentpath=file_title
+                        destination="./evaluacionescsv/"+archivo
+                        shutil.move(currentpath, destination)
+
     #Paso 3: descargar docs encontrados aún no descargados
     for file_list in drive.ListFile({'q': " '11doEjeqBMrPXpk_I3hho95WYU5YzDZ-5' in parents and trashed=false"}):
         for file1 in file_list:
@@ -42,7 +48,11 @@ def get_drivefiles():
                         file_d = drive.CreateFile({'id': file_id})
                         file_d.GetContentFile(file_title)
                         new_dloads.append(file_title)
-    
+                        #esto es para pasarlo a la carpeta correspondiente
+                        currentpath=file_title
+                        destination="./informesdocx/"+archivo
+                        shutil.move(currentpath, destination)
+
     #Paso 4: agregar nuevos archivos a la lista de descargados
     with open("filedloads.txt","a") as f:
         for x in new_dloads:
@@ -50,4 +60,4 @@ def get_drivefiles():
             f.write(x)
 
 get_drivefiles()
-
+ 
