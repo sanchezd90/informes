@@ -53,11 +53,12 @@ class Lector():
             if codigo not in diccionarioInformes:
                 diccionarioInformes[codigo]={"nombre":nombre,"dni":dni,"fechaEv":date,"antecedentes":antecedentes,"conclusion":conclusion}
 
-        #loop para revisar archivos csv y agregar datos a datos_informes
-        for archivo in os.listdir('informes/'):
+        #loop para revisar archivos docs y agregar datos a datos_informes
+        for archivo in os.listdir('informesdocx/'):
             if archivo.endswith(".docx"):
-                archivo=os.path.join("./informes/",archivo)
+                archivo=os.path.join("./informesdocx/",archivo)
                 getText(archivo)
+                os.remove(archivo)
 
         with open("informes.json","w") as f:
             json.dump(diccionarioInformes,f,indent=4)
@@ -69,9 +70,9 @@ class Lector():
             diccionarioEvaluaciones = json.load(f) #diccionario con datos de todos los informes almacenados en JSON
 
         #loop para revisar archivos csv y agregar datos a datos_evaluaciones
-        for archivo in os.listdir('evaluaciones/'):
+        for archivo in os.listdir('evaluacionescsv/'):
             if archivo.endswith(".csv"):
-                archivo=os.path.join("./evaluaciones/",archivo)
+                archivo=os.path.join("./evaluacionescsv/",archivo)
                 with open(file=archivo, mode="r", encoding="utf-8-sig") as csvfile:
                     csvReader = csv.reader(csvfile, delimiter=';')
                     datos_evaluacion = list(csvReader)
@@ -112,8 +113,10 @@ class Lector():
         with open("evaluaciones.json","w") as f:
             json.dump(diccionarioEvaluaciones,f,indent=4)
 
+
 #para crear instancia y leer datos de ambos json
 
 lector=Lector()
-lector.leer_evaluaciones()
+#lector.leer_evaluaciones()
 lector.leer_informes()
+
