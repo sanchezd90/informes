@@ -1,8 +1,8 @@
 import pymongo
 import json
 import os
+from mongoclient import cluster
 
-cluster=pymongo.MongoClient("mongodb+srv://sanchezd90:dbuser-L6H6@cluster0.wwnbb.mongodb.net/?retryWrites=true&w=majority")
 
 db=cluster["ENPS"]
 
