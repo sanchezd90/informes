@@ -27,6 +27,8 @@ class Lector():
                     dni = x.lstrip("DNI: ").replace(".","").replace(",","")
                 if "Fecha de Evaluación: " in x:
                     fechaEv = x.lstrip("Fecha de Evaluación: ")
+                    if "y" in fechaEv:
+                        fechaEv=fechaEv.partition("y")[0].strip()
                 if "Antecedentes" in x:
                     antecedentes= fullText[i+1]
                 if "realizó sus estudios" in x:
