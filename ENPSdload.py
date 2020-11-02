@@ -21,7 +21,7 @@ def get_drivefiles():
     for file_list in drive.ListFile({'q': " '11doEjeqBMrPXpk_I3hho95WYU5YzDZ-5' in parents and trashed=false"}):
         for file1 in file_list:
             file_id= file1['id']
-            q_value=f" '{file_id}' in parents and title contains 'ENPS' and title contains 'csv' and trashed=false"
+            q_value=f" '{file_id}' in parents and title contains 'csv' and trashed=false"
             for f_list in drive.ListFile({'q': q_value}):
                 for f in f_list:
                     file_title= f['title']
@@ -32,7 +32,7 @@ def get_drivefiles():
                         new_dloads.append(file_title)
                         #esto es para pasarlo a la carpeta correspondiente
                         currentpath=file_title
-                        destination="./evaluacionescsv/"+archivo
+                        destination="./evaluacionescsv/"+file_title
                         shutil.move(currentpath, destination)
 
     #Paso 3: descargar docs encontrados aún no descargados
@@ -50,7 +50,7 @@ def get_drivefiles():
                         new_dloads.append(file_title)
                         #esto es para pasarlo a la carpeta correspondiente
                         currentpath=file_title
-                        destination="./informesdocx/"+archivo
+                        destination="./informesdocx/"+file_title
                         shutil.move(currentpath, destination)
 
     #Paso 4: agregar nuevos archivos a la lista de descargados
